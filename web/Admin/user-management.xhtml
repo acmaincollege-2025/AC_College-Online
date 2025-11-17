@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template/template.xhtml">
+
+            <ui:define name="nav">
+                <h:form>
+                    <p:link outcome="index" value="Return Home"/>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="userForm">
+                    <p:panel header="User Management" styleClass="maroon-header">
+                        <p:messages id="msgs"  closable="true" />
+
+                        <p:panelGrid columns="2" columnClasses="label,value"  styleClass="p-grid p-fluid">
+                            <p:outputLabel for="username" value="Username:" />
+                            <p:inputText id="username" value="#{loginBean.user.username}" required="true" />
+
+                            <p:outputLabel for="password" value="Password:" />
+                            <p:password id="password" value="#{loginBean.user.password}" required="true" redisplay="true" />
+                            
+                            <p:outputLabel for="lastname" value="Last Name:" />
+                            <p:inputText id="lastname" value="#{loginBean.user.lastname}" required="true" />
+
+                            <p:outputLabel for="firstname" value="First Name:" />
+                            <p:inputText id="firstname" value="#{loginBean.user.firstname}" required="true" />
+
+                            <p:outputLabel for="role" value="Role:" />
+                            <p:selectOneMenu id="role" value="#{loginBean.user.role}" required="true">
+                                <f:selectItem itemLabel="Select Role" itemValue="" />
+                                <f:selectItem itemLabel="Registrar" itemValue="Registrar" />
+                                <f:selectItem itemLabel="Dean" itemValue="Dean" />
+                                <f:selectItem itemLabel="Admission" itemValue="Admission" />
+                                <f:selectItem itemLabel="System Admin" itemValue="Administrator" />
+                                <f:selectItem itemLabel="Accounting" itemValue="Accounting" />
+                                <f:selectItem itemLabel="Student" itemValue="Student" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="status" value="Status:" />
+                            <p:selectOneMenu id="status" value="#{loginBean.user.status}" required="true">
+                                <f:selectItem itemLabel="Active" itemValue="Active" />
+                                <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+
+                        <p:separator />
+
+                        <p:commandButton value="#{loginBean.editMode ? 'Update User' : 'Add User'}"
+                                         action="#{loginBean.saveUser}"
+                                         update=":userForm:userTable :userForm:msgs"
+                                         icon="pi pi-save" />
+                        <p:commandButton value="Reset"
+                                         action="#{loginBean.resetForm}"
+                                         update=":userForm"
+                                         icon="pi pi-refresh"
+                                         styleClass="p-button-secondary" />
+                    </p:panel>
+
+                    <p:spacer height="20" />
+
+                    <p:panel header="User List" styleClass="maroon-header">
+                        <p:dataTable id="userTable" value="#{loginBean.userList}" var="u" paginator="true" rows="10" >
+                            <p:column headerText="Username">
+                                <h:outputText value="#{u.username}" />
+                            </p:column>
+                            <p:column headerText="Role">
+                                <h:outputText value="#{u.role}" />
+                            </p:column>
+                            <p:column headerText="Status">
+                                <h:outputText value="#{u.status}" />
+                            </p:column>
+                            <p:column headerText="Actions">
+                                <p:commandButton icon="pi pi-pencil" action="#{loginBean.editUser(u)}" update=":userForm" styleClass="p-button-sm p-button-warning" />
+                                <p:commandButton icon="pi pi-trash" action="#{loginBean.deleteUser(u.id)}" update=":userForm:userTable :userForm:msgs" styleClass="p-button-sm p-button-danger" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

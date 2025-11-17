@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template/admission-template.xhtml">
+<!--
+        <ui:define name="sidebar">
+            <h:form>
+                <p:menu styleClass="sidebar-menu" style="background: maroon; color: white;">
+                    <p:menuitem value="Proceed to Enrollment" outcome="adm-enroll" icon="pi pi-angle-right" />
+                    <p:menuitem value="Register Student" outcome="student-registration" icon="pi pi-user-plus" />
+                </p:menu>
+            </h:form>
+        </ui:define> -->
+
+        <ui:define name="content">
+            <h:form id="dashboardForm">
+
+                <p:toolbar style="margin-top:20px;">
+                    <p:toolbarGroup>
+                        <p:button value="Student Registration" outcome="student-registration" icon="pi pi-user-plus" />
+                        <p:button value="Enrollment List" outcome="adm-enroll" icon="pi pi-list" />
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <p:panel header="Admission Dashboard" styleClass="maroon-header">
+
+                    <!-- KPI Panels -->
+                    <p:panelGrid columns="2" layout="grid" columnClasses="p-col-6,p-col-6" styleClass="p-grid">
+                        <p:panel style="text-align:center; background-color:#f8f9fa;">
+                            <f:facet name="header">Total Applicants</f:facet>
+                            <h2 style="color: maroon;">#{admissionDashboardBean.totalApplicants}</h2>
+                        </p:panel>
+
+                        <p:panel style="text-align:center; background-color:#f8f9fa;">
+                            <f:facet name="header">Pending Verifications</f:facet>
+                            <h2 style="color: maroon;">#{admissionDashboardBean.pendingVerifications}</h2>
+                        </p:panel>
+                    </p:panelGrid>
+
+                    <p:spacer height="20" />
+
+                    <!-- Bar Chart -->
+                    <p:chart type="bar" model="#{admissionDashboardBean.programChart}" style="width:100%; height:300px;" />
+
+                </p:panel>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+</html>

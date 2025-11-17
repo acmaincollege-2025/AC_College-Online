@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Enrollment Confirmation</title>
+        <style>
+            .confirmation-box {
+                width: 800px;
+                margin: auto;
+                border: 1px solid #ccc;
+                padding: 20px;
+                font-family: Arial, sans-serif;
+            }
+            .header, .section-title {
+                text-align: center;
+                font-weight: bold;
+            }
+            .info-table {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            .info-table td {
+                padding: 5px;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <h:form>
+            <div class="confirmation-box">
+                <h2 class="header">College Enrollment Confirmation</h2>
+
+                <h3 class="section-title">Student Information</h3>
+                <h:panelGrid columns="2" columnClasses="label,value" class="info-table">
+                    <h:outputText value="Student No:" />
+                    <h:outputText value="#{enrollmentBean.selectedEnrollment.studno}" />
+
+                    <h:outputText value="Full Name:" />
+                    <h:outputText value="#{enrollmentBean.selectedEnrollment.studentName}" />
+
+                    <h:outputText value="Program:" />
+                    <h:outputText value="#{enrollmentBean.selectedEnrollment.programName}" />
+
+                    <h:outputLabel value="Year Level:" />
+                    <h:outputText value="#{enrollment.yearLevel}" />
+
+                </h:panelGrid>
+
+                <h3 class="section-title">Enrollment Details</h3>
+                <h:panelGrid columns="2" columnClasses="label,value" class="info-table">
+                    <h:outputText value="Academic Year:" />
+                    <h:outputText value="#{enrollmentBean.selectedEnrollment.academic_year}" />
+
+                    <h:outputText value="Semester:" />
+                    <h:outputText value="#{enrollmentBean.selectedEnrollment.semester}" />
+
+                    <h:outputText value="Date Enrolled:" />
+                    <h:outputText value="#{enrollmentBean.selectedEnrollment.date_enrolled}">
+                        <f:convertDateTime pattern="MMMM dd, yyyy" />
+                    </h:outputText>
+
+                    <h:outputText value="Status:" />
+                    <h:outputText value="#{enrollmentBean.selectedEnrollment.status}" />
+                </h:panelGrid>
+
+                <h3 class="section-title">Enrolled Subjects</h3>
+                <p:dataTable value="#{enrollmentBean.selectedEnrollment.enrolledCourses}" >
+                    <h:outputText value="#{c.course_code}" />
+                    </p:column>
+                    <p:column headerText="Course Name">
+                        <h:outputText value="#{c.course_name}" />
+                    </p:column>
+                    <p:column headerText="Units">
+                        <h:outputText value="#{c.units}" />
+                    </p:column>
+                </p:dataTable>
+
+                <h:panelGroup layout="block" style="text-align:center; margin-top:20px;">
+                    <p:commandButton value="Print" type="button" onclick="window.print()" icon="pi pi-print"/>
+                    <p:button value="Back" outcome="admission-enrollments" icon="pi pi-arrow-left"/>
+                </h:panelGroup>
+            </div>
+        </h:form>
+    </h:body>
+</html>
+
+

@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Dean Portal</title>
+        <h:outputStylesheet library="css" name="styles.css" />
+    </h:head>
+
+    <h:body styleClass="layout-wrapper dean-theme">
+
+        <!-- ✅ SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h:graphicImage library="logo" name="logo.png" style="height:40px;" alt="Logo" />
+                <h:outputText value="Dean Portal" styleClass="portal-title" />
+            </div>
+
+            <h:form>
+                <h:panelGrid columns="1" style="margin-top:1em; color:white;">
+                    <p:link outcome="dean-dashboard" value="🏠 Dashboard" styleClass="sidebar-link" />
+                    <p:link outcome="enrollment-list" value="📋 Enrollment List" styleClass="sidebar-link" />
+                    <p:link outcome="student-progress" value="📈 Student Progress" styleClass="sidebar-link" />
+                    <p:link outcome="enrollment-statistics" value="📊 Enrollment Stats" styleClass="sidebar-link" />
+                </h:panelGrid>
+
+                <div class="sidebar-user">
+                    <h:outputText value="👤 #{loginBean.fullname}" styleClass="user-name" />
+                    <p:commandLink value="Profile"
+                                   onclick="PF('userProfileDialog').show(); return false;"
+                                   styleClass="sidebar-link" />
+
+                </div>
+            </h:form>
+        </aside>
+
+        <!-- ✅ MAIN CONTENT -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <div>
+                    <h:outputText value="Welcome, #{loginBean.fullname}" /> -
+                    <h:outputText value="#{loginBean.userRole}" />
+                </div>
+                <h:form>
+                    <p:commandButton value="Logout" action="#{loginBean.logout}" icon="pi pi-sign-out" styleClass="p-button-danger p-button-sm" />
+                </h:form>
+            </div>
+
+            <!-- Dynamic Page Content -->
+            <div class="content">
+                <ui:insert name="content" />
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>&copy; 2025 College Enrollment System</p>
+            </footer>
+        </main>
+
+        <!-- Account Settings Dialog -->
+        <ui:include src="/common/user-profile-dialog.xhtml" />
+
+    </h:body>
+</html>

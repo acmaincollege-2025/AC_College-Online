@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Registrar Portal</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <style>
+            .layout-wrapper {
+                display: grid;
+                grid-template-areas: "sidebar header" "sidebar content" "sidebar footer";
+                grid-template-columns: 240px 1fr;
+                grid-template-rows: 60px 1fr 40px;
+                height: 100vh;
+            }
+            .sidebar {
+                grid-area: sidebar;
+                background-color: #1e88e5;
+                color: white;
+                padding: 20px 15px;
+            }
+            .header {
+                grid-area: header;
+                background-color: #1976d2;
+                color: white;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 20px;
+            }
+            .content {
+                grid-area: content;
+                padding: 20px;
+                background: #fff;
+                overflow-y: auto;
+            }
+            .footer {
+                grid-area: footer;
+                background-color: #1565c0;
+                color: white;
+                text-align: center;
+                padding: 10px;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <div class="layout-wrapper">
+
+            <div class="sidebar">
+                <h2>Registrar</h2>
+                <ui:insert name="sidebar" />
+                <div style="margin-top:auto; padding-top:20px; border-top:1px solid white;">
+                    <p:commandLink value="#{loginBean.user.fullname}" 
+                                   onclick="PF('profileWidget').show();"
+                                   style="color: white; font-weight: bold;" />
+                </div>
+
+            </div>
+
+            <div class="header">
+                <span>Welcome, <strong><h:outputText value="#{loginBean.user.fullname}" /></strong></span>
+                <span><h:outputText value="#{loginBean.userRole}" /></span>
+            </div>
+
+            <div class="content">
+                <ui:insert name="content" />
+            </div>
+
+            <div class="footer">
+                &copy; 2025 College Enrollment System | Registrar Portal
+            </div>
+        </div>
+        <!-- USER PROFILE DIALOG -->
+        <p:dialog id="profileDialog"
+                  header="User Profile"
+                  widgetVar="profileWidget"
+                  modal="true"
+                  closable="true"
+                  resizable="false"
+                  width="500"
+                  onHide="PF('profileWidget').hide();">
+
+            <h:form id="profileForm">
+                <p:panelGrid columns="2" columnClasses="label,value" styleClass="ui-panelgrid-blank">
+
+                    <h:outputLabel value="Username:" />
+                    <p:inputText value="#{loginBean.user.username}" disabled="true" />
+
+                    <h:outputLabel value="First Name:" />
+                    <p:inputText value="#{loginBean.user.firstname}" required="true" />
+
+                    <h:outputLabel value="Last Name:" />
+                    <p:inputText value="#{loginBean.user.lastname}" required="true" />
+
+                </p:panelGrid>
+
+                <p:separator />
+
+                <h3>Change Password</h3>
+                <p:panelGrid columns="2" columnClasses="label,value" styleClass="ui-panelgrid-blank">
+
+                    <h:outputLabel value="Current Password:" />
+                    <p:password value="#{userProfileBean.currentPassword}" feedback="false" />
+
+                    <h:outputLabel value="New Password:" />
+                    <p:password value="#{userProfileBean.newPassword}" feedback="false" />
+
+                    <h:outputLabel value="Confirm Password:" />
+                    <p:password value="#{userProfileBean.confirmPassword}" feedback="false" />
+                </p:panelGrid>
+
+                <p:separator />
+
+                <p:commandButton value="Update Info" 
+                                 icon="pi pi-save"
+                                 action="#{userProfileBean.updateProfile()}"
+                                 update="@all"
+                                 styleClass="p-button-success" />
+
+                <p:commandButton value="Close" 
+                                 icon="pi pi-times"
+                                 onclick="PF('profileWidget').hide();"
+                                 type="button"
+                                 styleClass="p-button-secondary" />
+            </h:form>
+        </p:dialog>
+
+    </h:body>
+</html>
+

@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./template/layout.xhtml">
+
+            <ui:define name="sidebar">
+                
+            </ui:define>
+
+            <ui:define name="content">
+                <style>
+                    .help-float-btn {
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        z-index: 9999;
+                    }
+
+                    .help-dialog {
+                        width: 350px;
+                    }
+
+                    .faq-entry {
+                        margin-bottom: 1rem;
+                        padding: 0.5rem;
+                        border-bottom: 1px solid #ccc;
+                    }
+                </style>
+                
+                <h:body>
+
+                    <h:form id="helpForm">
+                        <!-- Floating Help Button -->
+                        <p:commandButton icon="pi pi-question-circle" styleClass="help-float-btn ui-button-secondary"
+                                         onclick="PF('helpDialog').show(); return false;" value="Help"/>
+
+                        <!-- Help Modal Dialog -->
+                        <p:dialog header="Help Center" widgetVar="helpDialog" modal="true" showEffect="fade" hideEffect="fade"
+                                  resizable="false" closable="true" styleClass="help-dialog">
+
+                            <h:panelGrid columns="1" style="width:100%;" cellpadding="5">
+                                <p:inputText value="#{faqBean.searchKeyword}" placeholder="Search..." style="width:100%">
+                                    <p:ajax event="keyup" listener="#{faqBean.searchFAQs}" update="faqResults" delay="300"/>
+                                </p:inputText>
+
+                                <p:selectOneMenu value="#{faqBean.selectedCategory}" style="width:100%">
+                                    <f:selectItem itemLabel="All Categories" itemValue="" />
+                                    <f:selectItems value="#{faqBean.categoryList}" />
+                                    <p:ajax listener="#{faqBean.searchFAQs}" update="faqResults"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+
+                            <p:outputPanel id="faqResults" style="margin-top:1rem; max-height:300px; overflow:auto;">
+                                <ui:repeat value="#{faqBean.results}" var="faq">
+                                    <div class="faq-entry">
+                                        <b>#{faq.question}</b>
+                                        <br/>
+                                        <h:outputText value="#{faq.answer}" escape="false" />
+                                    </div>
+                                </ui:repeat>
+
+                                <h:outputText rendered="#{empty faqBean.results}" value="No results found." />
+                            </p:outputPanel>
+
+                        </p:dialog>
+                    </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

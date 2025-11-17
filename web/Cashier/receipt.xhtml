@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template/template.xhtml">
+
+            <ui:define name="sidebar">
+
+            </ui:define>
+
+            <ui:define name="content">
+                <style>
+                    .receipt-container {
+                        width: 600px;
+                        margin: 40px auto;
+                        padding: 30px;
+                        border: 1px solid #ccc;
+                        font-family: Arial, sans-serif;
+                        background: #fdfdfd;
+                    }
+                    .receipt-header {
+                        text-align: center;
+                        font-size: 22px;
+                        font-weight: bold;
+                        margin-bottom: 20px;
+                        color: maroon;
+                    }
+                    .receipt-field {
+                        margin: 10px 0;
+                    }
+                    .receipt-label {
+                        font-weight: bold;
+                        display: inline-block;
+                        width: 200px;
+                    }
+                    .receipt-actions {
+                        margin-top: 30px;
+                        text-align: center;
+                    }
+                    .btn-print {
+                        padding: 10px 20px;
+                        font-size: 14px;
+                    }
+                </style>
+                <div class="receipt-container">
+                    <div class="receipt-header">Official Payment Receipt</div>
+
+                    <h:panelGroup rendered="#{not empty paymentBean.receiptData}">
+                        <div class="receipt-field">
+                            <span class="receipt-label">Student No:</span>
+                            <h:outputText value="#{paymentBean.receiptData.studentNo}" />
+                        </div>
+                        <div class="receipt-field">
+                            <span class="receipt-label">Enrollment ID:</span>
+                            <h:outputText value="#{paymentBean.receiptData.enrollmentId}" />
+                        </div>
+                        <div class="receipt-field">
+                            <span class="receipt-label">Payment Type:</span>
+                            <h:outputText value="#{paymentBean.receiptData.paymentType}" />
+                        </div>
+                        <div class="receipt-field">
+                            <span class="receipt-label">Reference No.:</span>
+                            <h:outputText value="#{paymentBean.receiptData.paymentReferenceNumber}" />
+                        </div>
+                        <div class="receipt-field">
+                            <span class="receipt-label">Amount Paid:</span>
+                            <h:outputText value="#{paymentBean.receiptData.amountPaid}">
+                                <f:convertNumber type="currency" currencySymbol="₱" />
+                            </h:outputText>
+                        </div>
+                        <div class="receipt-field">
+                            <span class="receipt-label">Payment Date:</span>
+                            <h:outputText value="#{paymentBean.receiptData.paymentDate}">
+                                <f:convertDateTime pattern="yyyy-MM-dd HH:mm" />
+                            </h:outputText>
+                        </div>
+
+                        <div class="receipt-actions">
+                            <h:commandButton value="Print Receipt" onclick="window.print()" styleClass="btn-print" />
+                            <h:link value="Back to Dashboard" outcome="cashier" style="margin-left:15px;" />
+                        </div>
+                    </h:panelGroup>
+                    <h:form>
+                        <h:commandLink value="Download PDF Receipt" action="#{paymentBean.downloadPDF}">
+                            <f:ajax execute="@this" render="@none"/>
+                        </h:commandLink>
+                    </h:form>
+
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

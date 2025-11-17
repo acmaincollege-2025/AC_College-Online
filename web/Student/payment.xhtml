@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./student-template.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                    <h2>Online Payment</h2>
+
+                    <h:panelGrid columns="2" cellpadding="5">
+
+                        <!-- Enrollment ID (hidden or read-only if already known) -->
+                        <h:outputLabel value="Enrollment ID:" for="enrollmentId"/>
+                        <h:inputText id="enrollmentId" value="#{paymentBean.payment.enrollmentId}" readonly="true"/>
+
+                        <!-- Payment Mode Selection -->
+                        <h:outputLabel value="Payment Mode:" for="paymentMode"/>
+                        <h:selectOneMenu id="paymentMode" value="#{paymentBean.payment.paymentMode}">
+                            <f:selectItem itemLabel="Select..." itemValue="" />
+                            <f:selectItem itemLabel="Full" itemValue="Full" />
+                            <f:selectItem itemLabel="Installment" itemValue="Installment" />
+                        </h:selectOneMenu>
+
+                        <!-- Payment Type (Online, GCASH, Bank, etc.) -->
+                        <h:outputLabel value="Payment Type:" for="paymentType"/>
+                        <h:inputText id="paymentType" value="#{paymentBean.payment.paymentType}" required="true"/>
+
+                        <!-- Reference Number -->
+                        <h:outputLabel value="Reference Number:" for="refNumber"/>
+                        <h:inputText id="refNumber" value="#{paymentBean.payment.paymentReferenceNumber}" required="true"/>
+
+                        <!-- Amount Paid -->
+                        <h:outputLabel value="Amount Paid:" for="amountPaid"/>
+                        <h:inputText id="amountPaid" value="#{paymentBean.payment.amountPaid}" required="true">
+                            <f:convertNumber />
+                        </h:inputText>
+
+                    </h:panelGrid>
+
+                    <br/>
+
+                    <h:commandButton value="Submit Payment" action="#{paymentBean.submitPayment}" />
+                    <br/><br/>
+
+                    <!-- Display FacesMessages -->
+                    <h:messages globalOnly="true" layout="table" />
+
+
+                </h:form>
+            </ui:define>
+
+            <ui:define name="footer">
+                footer
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

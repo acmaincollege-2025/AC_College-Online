@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Dialog</title>
+    </h:head>
+    <h:body>
+        <!-- Account Settings Dialog -->
+        <p:dialog id="accountSettingsDialog"
+                  widgetVar="accountSettingsWidget"
+                  header="Account Settings"
+                  modal="true"
+                  resizable="false"
+                  closable="true"
+                  draggable="false"
+                  width="700"
+                  onHide="resetAccountForm()">
+            <ui:include src="/dialogs/account-settings.xhtml" />
+        </p:dialog>
+
+        <!-- Login Error Dialog -->
+        <p:dialog id="loginErrorDialog"
+                  widgetVar="loginErrorWidget"
+                  header="Login Failed"
+                  modal="true"
+                  closable="true"
+                  resizable="false"
+                  showEffect="fade"
+                  hideEffect="fade"
+                  width="350">
+            <h:outputText value="Invalid username or password. Please try again." />
+        </p:dialog>
+
+        <!-- Student Change Password Dialog -->
+        <p:dialog id="studentPasswordDialog"
+                  widgetVar="studentChangePasswordWidget"
+                  header="Change Password"
+                  modal="true"
+                  resizable="false"
+                  closable="true"
+                  draggable="false"
+                  width="450">
+            <h:form>
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <p:password value="#{userBean.currentPassword}" feedback="false" styleClass="form-control" />
+                </div>
+                <div class="form-group mt-2">
+                    <label>New Password</label>
+                    <p:password value="#{userBean.newPassword}" feedback="false" styleClass="form-control" />
+                </div>
+                <div class="form-group mt-2">
+                    <label>Confirm New Password</label>
+                    <p:password value="#{userBean.confirmPassword}" feedback="false" styleClass="form-control" />
+                </div>
+                <p:commandButton value="Update Password" action="#{userBean.changePassword}" 
+                                 update="@form" styleClass="mt-3 p-button-success" />
+            </h:form>
+        </p:dialog>
+
+    </h:body>
+</html>
+

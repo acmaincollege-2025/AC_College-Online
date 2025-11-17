@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template/template.xhtml">
+
+            <ui:define name="sidebar">
+                <h:form>
+                    <h:panelGrid>
+                        <p:link outcome="dean" value="Return to Dashboard" style="color:white;"/>
+                        <p:link outcome="index" value="Log Out" style="color:white;"/>
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="content">
+                <!-- Student Search Form -->
+                <h:form id="searchForm">
+                    <p:panel header="Search Student by Program and Name/ID">
+                        <h:panelGrid columns="4" cellpadding="5">
+
+                            <h:outputLabel value="Program:" />
+                            <p:selectOneMenu value="#{studentProgressBean.selectedProgramId}">
+                                <f:selectItem itemLabel="-- Select Program --" itemValue="" />
+                                <f:selectItems value="#{studentProgressBean.programList}" var="p"
+                                               itemLabel="#{p.program_name}" itemValue="#{p.program_code}" />
+                            </p:selectOneMenu>
+
+                            <p:inputText value="#{studentProgressBean.searchKeyword}" placeholder="Last name or student no." />
+                            <p:commandButton value="Search"
+                                             action="#{studentProgressBean.searchStudents}"
+                                             update="studentSearchTable"
+                                             icon="pi pi-search" />
+                        </h:panelGrid>
+
+                        <p:dataTable id="studentSearchTable"
+                                     value="#{studentProgressBean.searchResults}"
+                                     var="s"
+                                     paginator="true"
+                                     rows="5"
+                                     rendered="#{not empty studentProgressBean.searchResults}">
+                            <p:column headerText="Student No.">
+                                #{s.studno}
+                            </p:column>
+                            <p:column headerText="Full Name">
+                                #{s.lastname}, #{s.firstname}
+                            </p:column>
+                            <p:column headerText="Action">
+                                <p:commandButton value="View Progress"
+                                                 action="#{studentProgressBean.loadProgressFromSearch(s)}"
+                                                 update=":statusUpdateForm:progressTable"
+                                                 icon="pi pi-eye" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+
+                <!-- Filter by Program + Autocomplete Student -->
+                <h:form id="filterForm">
+                    <p:panel header="Filter by Program and Student">
+                        <h:panelGrid columns="4" cellpadding="5">
+
+                            <h:outputLabel value="Program:" />
+                            <p:selectOneMenu value="#{studentProgressBean.selectedProgramId}">
+                                <f:selectItem itemLabel="-- Select Program --" itemValue="" />
+                                <f:selectItems value="#{studentProgressBean.programList}" var="prog"
+                                               itemLabel="#{prog.program_name}" itemValue="#{prog.program_code}" />
+                                <p:ajax listener="#{studentProgressBean.loadStudentsByProgram}"
+                                        update="studentAuto" />
+                            </p:selectOneMenu>
+
+                            <h:outputLabel value="Student:" />
+                            <p:autoComplete id="studentAuto"
+                                            value="#{studentProgressBean.selectedStudent}"
+                                            completeMethod="#{studentProgressBean.completeStudent}"
+                                            var="stud"
+                                            itemLabel="#{stud.lastname}, #{stud.firstname} (#{stud.studno})"
+                                            itemValue="#{stud}"
+                                            forceSelection="true"
+                                            dropdown="true"
+                                            converter="studentConverter">
+                                <p:ajax event="itemSelect"
+                                        listener="#{studentProgressBean.loadProgressFromAutocomplete}"
+                                        update=":statusUpdateForm:progressTable" />
+                            </p:autoComplete>
+
+                        </h:panelGrid>
+                    </p:panel>
+                </h:form>
+
+                <!-- Progress Table and Update -->
+                <h:form id="statusUpdateForm">
+                    <p:panel header="Course Progress Details" style="margin-top:20px">
+                        <h:dataTable value="#{studentProgressBean.courseProgressList}" var="cp" border="1" id="progressTable">
+                            <h:column>
+                                <f:facet name="header">Course</f:facet>
+                                    #{cp.course.courseTitle}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Status</f:facet>
+                                <h:selectOneMenu value="#{studentProgressBean.selectedStatus}">
+                                    <f:selectItem itemLabel="Select" itemValue="" />
+                                    <f:selectItem itemLabel="Ongoing" itemValue="Ongoing" />
+                                    <f:selectItem itemLabel="Completed" itemValue="Completed" />
+                                    <f:selectItem itemLabel="Failed" itemValue="Failed" />
+                                </h:selectOneMenu>
+                            </h:column>
+                            <h:column>
+                                <h:commandButton value="Update"
+                                                 action="#{studentProgressBean.updateCourseStatus}">
+                                    <f:setPropertyActionListener target="#{studentProgressBean.selectedCourseId}"
+                                                                 value="#{cp.course.courseId}" />
+                                </h:commandButton>
+                            </h:column>
+                        </h:dataTable>
+                        <p:commandButton value="Custom PDF Export" icon="pi pi-file-pdf"
+                                         action="#{studentProgressBean.generateProgressPdf}" ajax="false" />
+
+
+                    </p:panel>
+
+                    <!-- Confirmation Dialog -->
+                    <p:confirmDialog widgetVar="confirmDlg"
+                                     message="Are you sure you want to update the status?"
+                                     header="Confirm"
+                                     severity="warn">
+                        <p:commandButton value="Yes"
+                                         oncomplete="PF('confirmDlg').hide()"
+                                         action="#{studentProgressBean.updateCourseStatus}"
+                                         update=":statusUpdateForm :messages" />
+                        <p:commandButton value="No" onclick="PF('confirmDlg').hide()" type="button" />
+                    </p:confirmDialog>
+                </h:form>
+
+                <!-- Feedback Messages -->
+                <p:growl id="messages" showDetail="true" life="4000" />
+
+
+            </ui:define>
+
+            <ui:define name="footer">
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

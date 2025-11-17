@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project name="EnrollmentSystem" basedir="." default="war">
+
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="web.dir" value="web"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="dist.dir" value="dist"/>
+
+    <target name="clean">
+        <delete dir="${build.dir}" />
+        <delete dir="${dist.dir}" />
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" debug="false" >
+            <classpath>
+                <fileset dir="${lib.dir}" includes="**/*.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="war" depends="clean,compile">
+        <mkdir dir="${dist.dir}"/>
+
+        <war destfile="${dist.dir}/enrollment.war" webxml="${web.dir}/WEB-INF/web.xml">
+            <fileset dir="${web.dir}" />
+            <lib dir="${lib.dir}" />
+            <classes dir="${classes.dir}" />
+        </war>
+    </target>
+
+</project>

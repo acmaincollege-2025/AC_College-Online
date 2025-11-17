@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template/admission-template.xhtml">
+<!-- 
+            <ui:define name="sidebar">
+                 <h:form>
+                    <h:panelGrid>
+                        <p:link outcome="enrollment" value="Enrollment" style="color:white;"/>
+                        <p:link outcome="dashboard" value="Return to Dashboard" style="color:white;"/>
+                        <p:link outcome="index" value="Log Out" style="color:white;"/>
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+-->
+            <ui:define name="content">
+                 <!-- Global Messages -->
+                <p:growl id="msgs" showDetail="true" />
+
+                <h:form id="studentForm">
+                    <p:panel header="Student Management" styleClass="maroon-theme">
+                        <!-- SR Code Field with Regenerate 
+                        <h:panelGrid columns="2" columnClasses="label,value" style="width:100%; margin-bottom:1rem;">
+                            <h:outputLabel for="srcode" value="SR Code:" />
+                            <h:panelGroup>
+                                <p:inputText id="srcode" value="{studentBean.student.srcode}" readonly="true" style="width: 70%;" />
+                                <p:commandButton value="Regenerate" icon="pi pi-refresh"
+                                                 action="{studentBean.generateSRCode}"
+                                                 update="srcode"
+                                                 process="@this"
+                                                 styleClass="p-button-secondary p-ml-2" />
+                            </h:panelGroup>
+                        </h:panelGrid>
+-->
+                        <!-- Student Fields -->
+                        <p:panelGrid columns="4" columnClasses="label,value,label,value" style="width: 100%;">
+                            <h:outputLabel for="studno" value="Student Number:" />
+                            <p:inputText id="studno" value="#{studentBean.student.studno}" required="true" requiredMessage="Student No. is required" />
+
+                            <h:outputLabel for="firstname" value="First Name:" />
+                            <p:inputText id="firstname" value="#{studentBean.student.firstname}" required="true" size="30"/>
+
+                            <h:outputLabel for="lastname" value="Last Name:" />
+                            <p:inputText id="lastname" value="#{studentBean.student.lastname}" required="true" size="30"/>
+
+                            <p:outputLabel for="middlename" value="Middle Name:" />
+                            <p:inputText id="middlename" value="#{studentBean.student.middlename}" size="30"/>
+                            <p:outputLabel for="gender" value="Gender:" />
+                            <p:selectOneMenu id="gender" value="#{studentBean.student.gender}">
+                                <f:selectItem itemLabel="Select" itemValue="" />
+                                <f:selectItem itemLabel="Male" itemValue="Male" />
+                                <f:selectItem itemLabel="Female" itemValue="Female" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="dob" value="Date of Birth:" />
+                            <p:calendar id="dob" value="#{studentBean.student.dob}" pattern="yyyy-MM-dd" />
+
+                            <p:outputLabel for="contactno" value="Contact No.:" />
+                            <p:inputText id="contactno" value="#{studentBean.student.contactno}" />
+
+                            <p:outputLabel for="email" value="Email:" />
+                            <p:inputText id="email" value="#{studentBean.student.email}" />
+
+                            <p:outputLabel for="address" value="Address:" />
+                            <p:inputTextarea id="address" value="#{studentBean.student.address}" autoResize="false" style="width: 100%;" />
+
+                            <p:outputLabel for="program" value="Program:" />
+                            <p:selectOneMenu id="program" value="#{studentBean.student.programId}">
+                                <f:selectItems value="#{studentBean.programList}" var="p"
+                                               itemValue="#{p.program_code}" itemLabel="#{p.program_name}" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="guardian" value="Guardian:" />
+                            <p:inputText id="guardian" value="#{studentBean.student.guardian}" size="30" />
+
+                            <p:outputLabel for="guardian_number" value="Guardian Contact:" />
+                            <p:inputText id="guardian_number" value="#{studentBean.student.guardianNumber}" />
+
+                            <p:outputLabel for="fathername" value="Father's Name:" />
+                            <p:inputText id="fathername" value="#{studentBean.student.fathername}" size="30"/>
+
+                            <p:outputLabel for="father_occ" value="Father's Occupation:" />
+                            <p:inputText id="father_occ" value="#{studentBean.student.fatherOccupation}" size="30"/>
+
+                            <p:outputLabel for="mothername" value="Mother's Name:" />
+                            <p:inputText id="mothername" value="#{studentBean.student.mothername}" size="30"/>
+
+                            <p:outputLabel for="mother_occ" value="Mother's Occupation:" />
+                            <p:inputText id="mother_occ" value="#{studentBean.student.motherOccupation}" size="30"/>
+
+                            <p:outputLabel for="parent_address" value="Parent Address:" />
+                            <p:inputTextarea id="parent_address" value="#{studentBean.student.parentAddress}" style="width: 100%;" />
+
+                            <p:outputLabel for="parent_contact" value="Parent Contact No.:" />
+                            <p:inputText id="parent_contact" value="#{studentBean.student.parentContactNumber}" />
+                            
+                            <h:outputLabel value="Student Type" />
+                            <h:selectOneMenu value="#{studentBean.student.studentType}" required="true">
+                                <f:selectItem itemLabel="Select Type" itemValue="" />
+                                <f:selectItem itemLabel="Freshman" itemValue="freshman" />
+                                <f:selectItem itemLabel="Transferee" itemValue="transferee" />
+                                <f:selectItem itemLabel="Returnee" itemValue="returnee" />
+                                <f:selectItem itemLabel="Old Student" itemValue="old" />
+                            </h:selectOneMenu>
+
+                            <h:outputLabel for="photo" value="Student Photo:" />
+                            <p:fileUpload id="photo" mode="advanced" auto="true"
+                                          dragDropSupport="true" 
+                                          listener="#{studentBean.handleFileUpload}"
+                                          update="msgs"
+                                          sizeLimit="5242880" fileLimit="1"
+                                          allowTypes="/(\.|\/)(jpg|jpeg|png)$/" />
+                        </p:panelGrid>
+
+                        <!-- Display Uploaded Photo -->
+                        <p:graphicImage value="/uploads/students/#{studentBean.student.photo}" width="100"
+                                        rendered="#{not empty studentBean.student.photo}" />
+
+                        <!-- Save Button -->
+                        <p:commandButton value="Save Student" action="#{studentBean.saveStudent}" update="studentForm msgs" styleClass="p-mt-3" />
+                    </p:panel>
+
+                    <p:separator />
+
+                    <!-- Student List Table -->
+                    <p:dataTable value="#{studentBean.studentList}" var="s" paginator="true" rows="10">
+                        <p:column headerText="Student No.">#{s.studno}</p:column>
+                        <p:column headerText="Name">#{s.lastname}, #{s.firstname}</p:column>
+                        <p:column headerText="Email">#{s.email}</p:column>
+                        <p:column headerText="Actions">
+                            <p:commandButton value="Edit" action="#{studentBean.editStudent(s)}" update="studentForm" />
+                            <p:commandButton icon="pi pi-trash" value="Delete"
+                                             oncomplete="PF('deleteDialog').show();"
+                                             actionListener="#{studentBean.confirmDelete(s)}"
+                                             process="@this" />
+                        </p:column>
+                    </p:dataTable>
+
+                    <!-- Confirm Delete Dialog (Moved inside same form) -->
+                    <p:confirmDialog widgetVar="deleteDialog" header="Confirm Deletion"
+                                     message="Are you sure you want to delete this student?" severity="warn" showEffect="fade">
+                        <p:commandButton value="Yes" action="#{studentBean.deleteStudentConfirmed}"
+                                         update="studentForm msgs"
+                                         oncomplete="PF('deleteDialog').hide()" />
+                        <p:commandButton value="No" onclick="PF('deleteDialog').hide()" type="button" />
+                    </p:confirmDialog>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="footer">
+                footer
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

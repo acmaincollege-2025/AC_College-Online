@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template/template.xhtml">
+
+            <ui:define name="sidebar">
+
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form>
+                    <h3>Tuition Fee Configuration</h3>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Per Unit:" />
+                        <h:inputText value="#{feeConfigBean.tuitionFee.amountPerUnit}" />
+                        <h:commandButton value="Update" action="#{feeConfigBean.updateTuitionFee}" />
+                    </h:panelGrid>
+
+                    <h3>Basic Fees</h3>
+                    <ui:repeat value="#{feeConfigBean.basicFees}" var="fee">
+                        <h:panelGrid columns="3">
+                            <h:outputText value="#{fee.feeType}" />
+                            <h:inputText value="#{fee.amount}" />
+                            <h:commandButton value="Update" action="#{feeConfigBean.updateBasicFee(fee)}" />
+                        </h:panelGrid>
+                    </ui:repeat>
+
+                    <h3>Other Fees</h3>
+                    <h:panelGrid columns="3">
+                        <h:inputText value="#{feeConfigBean.newOtherFee.feeCode}" />
+                        <h:inputText value="#{feeConfigBean.newOtherFee.descriptions}"  />
+                        <h:inputText value="#{feeConfigBean.newOtherFee.amount}"  />
+                        <h:commandButton value="Add" action="#{feeConfigBean.addOtherFee}" />
+                    </h:panelGrid>
+
+                    <h:dataTable value="#{feeConfigBean.otherFees}" var="fee" border="1">
+                        <h:column>
+                            <f:facet name="header">Code</f:facet>
+                                #{fee.feeCode}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Description</f:facet>
+                                #{fee.descriptions}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Amount</f:facet>
+                                #{fee.amount}
+                        </h:column>
+                        <h:column>
+                            <h:commandButton value="Edit" action="#{feeConfigBean.setSelectedOtherFee(fee)}" />
+                            <h:commandButton value="Delete" action="#{feeConfigBean.deleteOtherFee(fee.id)}" />
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

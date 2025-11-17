@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../template/template.xhtml">
+
+            <ui:define name="sidebar">
+
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="cashierForm">
+                    <p:panel header="Student Assessments" styleClass="maroon-header">
+                        <p:dataTable value="#{assessmentBean.cashierAssessmentList}" var="assess" paginator="true" rows="10">
+                            <p:column headerText="Student Name">
+                                #{assess.studentName}
+                            </p:column>
+                            <p:column headerText="Program">
+                                #{assess.programName}
+                            </p:column>
+                            <p:column headerText="Academic Year">
+                                #{assess.academicYear}
+                            </p:column>
+                            <p:column headerText="Semester">
+                                #{assess.semester}
+                            </p:column>
+                            <p:column headerText="Units">
+                                #{assess.totalUnits}
+                            </p:column>
+                            <p:column headerText="Total Amount">
+                                ₱#{assess.totalAmount}
+                            </p:column>
+                            <p:column headerText="Action">
+                                <p:commandButton value="View Details" icon="pi pi-search"
+                                                 actionListener="#{assessmentBean.viewAssessmentDetail(assess)}"
+                                                 update=":assessmentDetailDialog"
+                                                 oncomplete="PF('assessmentDialog').show()"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                    <p:dialog header="Assessment Details" widgetVar="assessmentDialog" modal="true" id="assessmentDetailDialog" resizable="false" width="600">
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <h:outputLabel value="Student Name:" />
+                            <h:outputText value="#{assessmentBean.selectedAssessment.studentName}" />
+                            <h:outputLabel value="Program:" />
+                            <h:outputText value="#{assessmentBean.selectedAssessment.programName}" />
+
+                            <h:outputLabel value="Academic Year:" />
+                            <h:outputText value="#{assessmentBean.selectedAssessment.academicYear}" />
+
+                            <h:outputLabel value="Semester:" />
+                            <h:outputText value="#{assessmentBean.selectedAssessment.semester}" />
+
+                            <h:outputLabel value="Total Units:" />
+                            <h:outputText value="#{assessmentBean.selectedAssessment.totalUnits}" />
+                        </h:panelGrid>
+
+                        <h3>Fee Breakdown</h3>
+                        <h:panelGrid columns="2">
+                            <h:outputText value="Tuition Fee (per unit):" />
+                            <h:outputText value="₱#{assessmentBean.selectedAssessment.unitFee}" />
+                            <h:outputText value="Tuition Total:" />
+                            <h:outputText value="₱#{assessmentBean.selectedAssessment.unitFee * assessmentBean.selectedAssessment.totalUnits}" />
+
+                            <h:outputText value="Basic Fees:" />
+                            <h:outputText value="₱#{assessmentBean.basicFeeTotal}" />
+
+                            <h:outputText value="Other Fees:" />
+                            <h:outputText value="₱#{assessmentBean.otherFeeTotal}" />
+
+                            <h:outputText value="Grand Total:" style="font-weight: bold;" />
+                            <h:outputText value="₱#{assessmentBean.selectedAssessment.totalAmount}" style="font-weight: bold;" />
+                        </h:panelGrid>
+
+                    </p:dialog>
+                </h:form>
+               
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

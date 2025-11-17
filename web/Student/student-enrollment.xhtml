@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template/template.xhtml">
+
+            <ui:define name="nav">
+                
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="studentEnrollmentForm">
+                    <p:panel header="My Enrollment">
+
+                        <p:outputLabel value="Academic Year:" />
+                        <p:inputText value="#{enrollmentBean.enrollment.academic_year}" />
+
+                        <p:outputLabel value="Semester:" />
+                        <p:selectOneMenu value="#{enrollmentBean.enrollment.semester}">
+                            <f:selectItem itemLabel="1st" itemValue="1st" />
+                            <f:selectItem itemLabel="2nd" itemValue="2nd" />
+                            <f:selectItem itemLabel="Summer" itemValue="Summer" />
+                        </p:selectOneMenu>
+
+                        <p:commandButton value="Submit Enrollment" action="#{enrollmentBean.enrollSelf}" 
+                                         update="@form" styleClass="ui-button-success" />
+
+                        <p:messages />
+                    </p:panel>
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

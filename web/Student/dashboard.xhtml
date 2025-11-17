@@ -1,0 +1,227 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/templates/student-template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="studentContent">
+        <ui:include src="/includes/dpa-dialog.xhtml" />
+
+        <h:form enctype="multipart/form-data">
+            <p:panel header="Student Dashboard" styleClass="ui-panel ui-widget ui-widget-content ui-corner-all ui-panel-title">
+
+                <h:outputText value="Welcome, #{studentBean.student.firstname} #{studentBean.student.lastname} (#{studentBean.student.studno})"
+                              style="float: right; font-weight: bold; margin-bottom: 10px;" />
+
+                <p:tabView>
+                    <!-- Enrolled Courses Tab -->
+                    <p:tab title="My Enrolled Courses">
+                        <p:dataTable value="#{enrollmentBean.studentEnrollments}" var="e">
+                            <p:column headerText="Academic Year">
+                                <h:outputText value="#{e.academic_year}" />
+                            </p:column>
+                            <p:column headerText="Semester">
+                                <h:outputText value="#{e.semester}" />
+                            </p:column>
+                            <p:column headerText="Status">
+                                <h:outputText value="#{e.status}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+
+                    <!-- Available Courses Tab -->
+                    <p:tab title="Available Courses">
+                        <p:dataTable value="#{courseBean.availableCoursesForStudent}" var="c">
+                            <p:column headerText="Course Code">
+                                <h:outputText value="#{c.courseCode}" />
+                            </p:column>
+                            <p:column headerText="Title">
+                                <h:outputText value="#{c.courseTitle}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+
+                    <!-- Payment History Tab -->
+                    <p:tab title="Payment History">
+                        <p:dataTable value="#{paymentBean.paymentHistoryForStudent}" var="p">
+                            <p:column headerText="Date">
+                                <h:outputText value="#{p.paymentDate}" />
+                            </p:column>
+                            <p:column headerText="Amount">
+                                <h:outputText value="#{p.amount}" />
+                            </p:column>
+                            <p:column headerText="Description">
+                                <h:outputText value="#{p.description}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+
+                    <!-- Actions Tab -->
+                    <p:tab title="Actions">
+                        <p:commandButton value="Edit Personal Info" icon="pi pi-user-edit"
+                                         action="student-edit.xhtml?faces-redirect=true" styleClass="ui-button-info" />
+                        <p:spacer width="10" />
+                        <p:commandButton value="Proceed to Enrollment" icon="pi pi-book"
+                                         action="student-enrollment.xhtml?faces-redirect=true" styleClass="ui-button-success" />
+                        <p:spacer width="10" />
+                        <p:commandButton value="Pre-Enrollment Form" icon="pi pi-file"
+                                         action="pre-enrollment-form.xhtml?faces-redirect=true" styleClass="ui-button-secondary" />
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+
+            <h:form id="coeForm">
+                <p:commandButton value="Request Certificate of Enrollment"
+                                 icon="pi pi-file"
+                                 action="#{coeBean.requestCOE}"
+                                 update="coeForm coeTable"
+                                 styleClass="p-button-success" />
+
+                <p:dataTable id="coeTable" value="#{coeBean.coeRequests}" var="req" styleClass="mt-3">
+                    <p:column headerText="Date Requested">
+                        <h:outputText value="#{req.requestDate}">
+                            <f:convertDateTime pattern="MMM dd, yyyy HH:mm" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Status">
+                        <h:outputText value="#{req.status}" />
+                    </p:column>
+                    <p:column headerText="Remarks">
+                        <h:outputText value="#{req.remarks}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+
+
+
+            <p:messages id="msg" closable="true" />
+        </h:form>
+        <h:form enctype="multipart/form-data" id="docUploadForm">
+            <p:panel header="Upload Enrollment Document">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel value="Document Type:" />
+                    <p:selectOneMenu value="#{documentBean.selectedType}">
+                        <f:selectItem itemLabel="-- Select --" itemValue="" />
+                        <f:selectItems value="#{documentBean.documentTypes}" />
+                    </p:selectOneMenu>
+
+                    <h:outputLabel value="Upload File:" />
+                    <p:fileUpload value="#{documentBean.uploadedFile}" mode="simple" />
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Upload"
+                                         action="#{documentBean.upload}"
+                                         update="@form"
+                                         icon="pi pi-upload" />
+                    </f:facet>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
+        <h:form>
+            <p:panel header="Support Center">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel value="Subject" />
+                    <p:inputText value="#{supportBean.ticket.subject}" required="true" />
+
+                    <h:outputLabel value="Message" />
+                    <p:inputTextarea value="#{supportBean.ticket.message}" autoResize="true" required="true" rows="5" cols="50" />
+                </h:panelGrid>
+
+                <p:commandButton value="Submit Ticket" action="#{supportBean.submitTicket}" update="@form" icon="pi pi-send" />
+            </p:panel>
+        </h:form>
+
+        <p:dialog header="Change Password"
+                  widgetVar="changePasswordDialog"
+                  modal="true"
+                  closable="true"
+                  resizable="false"
+                  draggable="false"
+                  showEffect="fade" hideEffect="fade">
+
+            <p:dialog id="changePasswordDialog" widgetVar="changePasswordDialog" header="Change Password" modal="true" closable="true" resizable="false">
+                <h:form id="changePasswordForm">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel for="currentPwd" value="Current Password:" />
+                        <p:password id="currentPwd" value="#{studentCredentialsBean.currentPassword}" required="true"/>
+
+                        <h:outputLabel for="newPwd" value="New Password:" />
+                        <p:password id="newPwd" value="#{studentCredentialsBean.newPassword}" required="true"/>
+
+                        <h:outputLabel for="confirmPwd" value="Confirm New Password:" />
+                        <p:password id="confirmPwd" value="#{studentCredentialsBean.confirmPassword}" required="true"/>
+                    </h:panelGrid>
+
+                    <p:messages id="changePwdMessages" closable="true"/>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Change Password"
+                                         action="#{studentCredentialsBean.changePassword}"
+                                         update="changePasswordForm"
+                                         process="changePasswordForm"
+                                         styleClass="p-button-success"
+                                         oncomplete="if (!args.validationFailed) PF('changePasswordDialog').hide();"/>
+                    </f:facet>
+                </h:form>
+            </p:dialog>
+
+            <p:commandButton value="Change Password" icon="pi pi-lock"
+                             onclick="PF('changePasswordDialog').show(); return false;"
+                             styleClass="p-button-secondary"/>
+
+            <!-- 🔒 Data Privacy Policy Notice -->
+            <p:dialog id="dpaDialog"
+                      widgetVar="dpaDialog"
+                      header="Data Privacy Notice"
+                      modal="true"
+                      closable="false"
+                      draggable="false"
+                      resizable="false"
+                      width="600"
+                      showEffect="fade"
+                      hideEffect="fade"
+                      visible="false">
+
+                <h:form id="dpaForm">
+                    <h:outputText escape="false" style="white-space: pre-line;">
+                        <![CDATA[
+                        <p style='font-size:14px; line-height:1.6;'>
+                            We value your privacy and are committed to protecting your personal information.
+                            By using this enrollment system, you consent to the collection and processing of your data
+                            for academic, administrative, and institutional purposes in compliance with the Data Privacy Act of 2012 (RA 10173).<br/><br/>
+                            Your information will be handled confidentially and used only for authorized activities such as enrollment,
+                            academic evaluation, billing, and official communications.<br/><br/>
+                            <strong>If you have questions or wish to withdraw consent, please contact the Data Protection Officer.</strong>
+                        </p>
+                        ]]>
+                    </h:outputText>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="I Understand and Agree"
+                                         styleClass="p-button-success"
+                                         icon="pi pi-check"
+                                         actionListener="#{loginBean.acknowledgeDpaNotice}"
+                                         oncomplete="PF('dpaDialog').hide();"
+                                         update="@form" />
+                    </f:facet>
+                </h:form>
+            </p:dialog>
+            <script>
+                window.addEventListener('DOMContentLoaded', function () {
+                    // JSF EL check if showDpaNotice == true
+                    if (#{not empty facesContext.externalContext.sessionMap['showDpaNotice']}) {
+                        PF('dpaDialog').show();
+                        // Reset the flag to avoid showing it again after refresh
+                #{facesContext.externalContext.sessionMap.remove('showDpaNotice')};
+                    }
+                });
+            </script>
+
+    </ui:define>
+
+</ui:composition>
+

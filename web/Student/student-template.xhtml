@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Student Dashboard</title>
+        <h:outputStylesheet name="styles.css" />
+        <h:outputScript name="botui.min.js" target="body"/>
+        <h:outputScript name="vue.min.js" target="body"/>
+        <style>
+            .chat-container {
+                max-height: 400px;
+                overflow-y: auto;
+                background-color: #f9f9f9;
+                padding: 1rem;
+                border-radius: 10px;
+                font-family: 'Segoe UI', sans-serif;
+            }
+
+            .chat-bubble {
+                max-width: 70%;
+                padding: 10px 15px;
+                border-radius: 20px;
+                margin: 10px 0;
+                position: relative;
+                clear: both;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .chat-bubble.user {
+                background-color: #e0f7fa;
+                margin-left: auto;
+                text-align: right;
+            }
+
+            .chat-bubble.system {
+                background-color: #fff3e0;
+                margin-right: auto;
+                text-align: left;
+            }
+
+            .chat-label {
+                font-size: 0.75rem;
+                font-weight: bold;
+                color: #777;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .chat-message {
+                margin: 0;
+                font-size: 1rem;
+            }
+
+            .chat-category {
+                font-size: 0.75rem;
+                color: #999;
+                display: block;
+                margin-top: 5px;
+                font-style: italic;
+            }
+
+        </style>
+    </h:head>
+
+    <h:body style="margin:0; padding:0;">
+        <!-- Header -->
+        <div class="header d-flex align-items-center">
+            <h:graphicImage library="logo" name="logo.png"
+                            style="height: 40px; margin-right: 15px;" alt="Logo" />
+            <h2 class="mb-0"><p:outputLabel value="Alitagtag College, Inc "/></h2> -
+            <h2 style="flex: 1;"><p:outputLabel value="College Enrollment System"/> </h2>
+
+            <h:panelGroup layout="block" rendered="#{not empty loginBean.fullname}">
+                <h:outputText value="Welcome, " style="margin-right: 5px;" />
+                <strong><h:outputText value="#{loginBean.fullname}" /></strong>
+                <span style="margin: 0 10px;">|</span>
+                <em><h:outputText value="#{loginBean.userRole}" /></em>
+            </h:panelGroup>
+
+            <h:form style="margin-left: 15px;">
+                <p:commandLink value="Logout" action="#{loginBean.logout}" styleClass="p-button-danger p-button-sm" />
+            </h:form>
+        </div>
+
+        <!-- Layout: Sidebar and Main Content -->
+        <div style="display:flex; min-height: 90vh;">
+            <!-- Sidebar -->
+            <h:panelGroup layout="block" style="width:250px; background-color:#f7f7f7; padding:1rem;">
+                <h:form id="sidebarForm">
+                    <p:menu styleClass="sidebar-menu" style="width:100%;">
+                        <p:menuitem value="Dashboard" icon="pi pi-home" outcome="/student_dashboard.xhtml" />
+                        <p:menuitem value="My Enrollment" icon="pi pi-book" outcome="/student-enrollment.xhtml" />
+                        <p:menuitem value="Personal Info" icon="pi pi-user" outcome="/student-edit.xhtml" />
+                        <p:menuitem value="Payment History" icon="pi pi-credit-card" outcome="/student-payment.xhtml" />
+                        <p:menuitem value="FAQ / Helpdesk" icon="pi pi-question-circle" outcome="/faq.xhtml" />
+                        <p:menuitem value="Change Password" icon="pi pi-lock"
+                                    onclick="PF('changePwdDlg').show(); return false;" />
+                        <p:menuitem value="Logout" icon="pi pi-sign-out"
+                                    action="#{loginBean.logout}" immediate="true" />
+                    </p:menu>
+                </h:form>
+            </h:panelGroup>
+
+            <!-- Main Content -->
+            <div style="flex:1; padding:2rem;">
+                <ui:insert name="content" />
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <h:panelGroup layout="block" style="text-align:center; padding:1rem; background-color:#880e4f; color:white;">
+            <p>© 2025 Student Portal - College Enrollment System</p>
+        </h:panelGroup>
+
+        <!-- Change Password Dialog -->
+        <p:dialog id="changePwdDialog" header="Change Password" modal="true" widgetVar="changePwdDlg" closable="true" resizable="false" draggable="false">
+            <h:form id="changePwdForm">
+                <p:messages id="changePwdMessages"  showDetail="true" closable="true"/>
+
+                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" columnClasses="label,value">
+                    <p:outputLabel for="currentPwd" value="Current Password:" />
+                    <p:password id="currentPwd" value="#{userBean.currentPassword}" required="true"/>
+
+                    <p:outputLabel for="newPwd" value="New Password:" />
+                    <p:password id="newPwd" value="#{userBean.newPassword}" required="true"/>
+
+                    <p:outputLabel for="confirmPwd" value="Confirm New Password:" />
+                    <p:password id="confirmPwd" value="#{userBean.confirmPassword}" required="true"/>
+                </p:panelGrid>
+
+                <p:separator/>
+
+                <p:commandButton value="Update Password" icon="pi pi-save"
+                                 action="#{userBean.updatePassword}" update="changePwdForm"
+                                 process="@form" styleClass="p-button-sm"/>
+            </h:form>
+        </p:dialog>
+
+        <!-- Messenger-Style FAQ Panel -->
+        <p:panel header="Need Help? Chat with FAQ Bot 🤖" toggleable="true" collapsed="true" style="margin-top:1rem;">
+            <h:form id="faqForm">
+                <!-- Category Filter -->
+                <div class="mb-2">
+                    <p:selectOneMenu value="#{fAQBean.selectedCategory}" style="width:200px">
+                        <f:selectItem itemLabel="All Categories" itemValue="" />
+                        <f:selectItems value="#{fAQBean.categories}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" />
+                        <p:ajax listener="#{fAQBean.filterFaqByCategory}" update="chatContainer" />
+                    </p:selectOneMenu>
+                </div>
+
+                <!-- Chat Container -->
+                <div id="chatContainer" class="chat-container">
+                    <ui:repeat value="#{fAQBean.filteredFaqList}" var="faq">
+                        <!-- User Question -->
+                        <div class="chat-bubble user">
+                            <span class="chat-label">You:</span>
+                            <p class="chat-message">#{faq.question}</p>
+                        </div>
+
+                        <!-- System Answer -->
+                        <div class="chat-bubble system">
+                            <span class="chat-label">FAQ Bot:</span>
+                            <p class="chat-message">#{faq.answer}</p>
+                            <span class="chat-category">#{faq.category}</span>
+                        </div>
+                    </ui:repeat>
+                </div>
+            </h:form>
+        </p:panel>
+
+
+        <!-- Floating Chatbot -->
+        <div id="chatbot-toggle" style="position:fixed; bottom:20px; right:20px; z-index:1000;">
+            <p:commandButton icon="pi pi-comment" title="Help" onclick="toggleBotUI()" styleClass="rounded-button"/>
+        </div>
+
+        <div id="chatbot-container" style="position:fixed; bottom:80px; right:20px; width:300px; display:none; z-index:1000;">
+            <div id="botui-app">
+                <bot-ui></bot-ui>
+            </div>
+        </div>
+
+        <script>
+            var botui = new BotUI('botui-app');
+
+            function toggleBotUI() {
+                var container = document.getElementById('chatbot-container');
+                container.style.display = container.style.display === 'none' ? 'block' : 'none';
+
+                if (container.style.display === 'block') {
+                    fetch('get-faqs-api?category=general')
+                            .then(response => response.json())
+                            .then(data => {
+                                botui.message.removeAll();
+                                data.forEach(faq => {
+                                    botui.message.add({
+                                        content: `<strong>Q:</strong> ${faq.question}<br/><strong>A:</strong> ${faq.answer}`
+                                    });
+                                });
+                            });
+                }
+            }
+        </script>
+    </h:body>
+</html>

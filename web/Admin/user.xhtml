@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template/layout.xhtml">
+
+            <ui:define name="sidebar">
+                <h:form>
+                    <p:link outcome="index" value="Log Out" style="color:white;"/>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="userForm">
+                    <p:growl id="msgs" showDetail="true" />
+
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <p:commandButton value="New User" icon="pi pi-plus"
+                                             action="#{userBean.openCreateDialog}"
+                                             update="createUserForm"
+                                             oncomplete="PF('createUserDialog').show()" />
+                        </p:toolbarGroup>
+                    </p:toolbar>
+
+                    <p:dataTable value="#{userBean.userList}" var="user" editable="true"
+                                 paginator="true" rows="10" widgetVar="userTable" id="userTable">
+
+                        <p:column headerText="Username">
+                            <h:outputText value="#{user.username}" />
+                        </p:column>
+                        <p:column headerText="Role">
+                            <h:outputText value="#{user.role}" />
+                        </p:column>
+                        <p:column headerText="Name">
+                            <h:outputText value="#{user.firstname} #{user.lastname}" />
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{user.status}" />
+                        </p:column>
+                        <p:column headerText="Actions">
+                            <p:commandLink 
+                                             update="editUserForm"
+                                             oncomplete="PF('editUserDialog').show()"
+                                             action="#{userBean.openEditDialog(user)}"
+                                             title="Edit" value="Update"/> |
+
+                            <p:commandLink  title="Delete" 
+                                             actionListener="#{userBean.deleteUser(user)}"
+                                             value="Remove"
+                                             update="userForm:msgs userForm:userTable" />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+
+                <!-- Create User Dialog -->
+                <h:form id="createUserForm">
+                    <p:dialog header="New User" widgetVar="createUserDialog" modal="true" resizable="false">
+                        <p:panelGrid columns="2" styleClass="ui-fluid">
+
+                            <p:outputLabel value="Username:" />
+                            <p:inputText value="#{userBean.currentUser.username}" required="true" />
+
+                            <h:outputLabel for="password" value="Password:" />
+                            <p:password id="password"
+                                        value="#{userBean.currentUser.password}"
+                                        required="true"
+                                        feedback="true"
+                                        promptLabel="Enter password"
+                                        weakLabel="Weak"
+                                        goodLabel="Good"
+                                        strongLabel="Strong"
+                                        match="confirmPassword"
+                                        validatorMessage="Passwords do not match." />
+
+                            <h:outputLabel for="confirmPassword" value="Confirm Password:" />
+                            <p:password id="confirmPassword"
+                                        value="#{userBean.confirmPassword}"
+                                        required="true"
+                                        feedback="false" />
+
+                            <p:outputLabel value="Role:" />
+                            <p:selectOneMenu value="#{userBean.currentUser.role}">
+                                <f:selectItem itemLabel="Select Role" itemValue="" />
+                                <f:selectItem itemLabel="Admin" itemValue="Admin" />
+                                <f:selectItem itemLabel="Admission" itemValue="Admission" />
+                                <f:selectItem itemLabel="Cashier" itemValue="Cashier" />
+                                <f:selectItem itemLabel="Registrar" itemValue="Registrar" />
+                                <f:selectItem itemLabel="Dean" itemValue="Dean" />
+                                <f:selectItem itemLabel="Student" itemValue="Student" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="First Name:" />
+                            <p:inputText value="#{userBean.currentUser.firstname}" />
+
+                            <p:outputLabel value="Last Name:" />
+                            <p:inputText value="#{userBean.currentUser.lastname}" />
+
+                            <p:outputLabel value="Status:" />
+                            <p:selectOneMenu value="#{userBean.currentUser.status}">
+                                <f:selectItem itemLabel="Active" itemValue="Active" />
+                                <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
+                            </p:selectOneMenu>
+
+                        </p:panelGrid>
+                        <f:facet name="footer">
+                            <p:commandButton value="Save" action="#{userBean.saveUser}"
+                                             update="userForm:userTable userForm:msgs"
+                                             resetValues="true"
+                                             oncomplete="PF('createUserDialog').hide()" />
+                            <p:commandButton value="Cancel" onclick="PF('createUserDialog').hide()" immediate="true" />
+                        </f:facet>
+                    </p:dialog>
+                </h:form>
+
+                <!-- Edit User Dialog -->
+                <h:form id="editUserForm">
+                    <p:dialog header="Edit User - #{userBean.currentUser.username}" widgetVar="editUserDialog" modal="true" resizable="false">
+                        <p:panelGrid columns="2" styleClass="ui-fluid">
+
+                            <p:outputLabel value="Username:" />
+                            <p:inputText value="#{userBean.currentUser.username}" required="true" />
+
+                            <h:outputLabel for="password" value="Password:" />
+                            <p:password id="password"
+                                        value="#{userBean.currentUser.password}"
+                                        required="true"
+                                        feedback="true"
+                                        promptLabel="Enter password"
+                                        weakLabel="Weak"
+                                        goodLabel="Good"
+                                        strongLabel="Strong"
+                                        match="confirmPassword"
+                                        validatorMessage="Passwords do not match." />
+
+                            <h:outputLabel for="confirmPassword" value="Confirm Password:" />
+                            <p:password id="confirmPassword"
+                                        value="#{userBean.confirmPassword}"
+                                        required="true"
+                                        feedback="false" />
+
+                            <p:outputLabel value="Role:" />
+                            <p:selectOneMenu value="#{userBean.currentUser.role}">
+                                <f:selectItem itemLabel="Select Role" itemValue="" />
+                                <f:selectItem itemLabel="Admin" itemValue="Admin" />
+                                <f:selectItem itemLabel="Admission" itemValue="Admission" />
+                                <f:selectItem itemLabel="Cashier" itemValue="Cashier" />
+                                <f:selectItem itemLabel="Registrar" itemValue="Registrar" />
+                                <f:selectItem itemLabel="Dean" itemValue="Dean" />
+                                <f:selectItem itemLabel="Student" itemValue="Student" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="First Name:" />
+                            <p:inputText value="#{userBean.currentUser.firstname}" />
+
+                            <p:outputLabel value="Last Name:" />
+                            <p:inputText value="#{userBean.currentUser.lastname}" />
+
+                            <p:outputLabel value="Status:" />
+                            <p:selectOneMenu value="#{userBean.currentUser.status}">
+                                <f:selectItem itemLabel="Active" itemValue="Active" />
+                                <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
+                            </p:selectOneMenu>
+
+                        </p:panelGrid>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Update" action="#{userBean.updateUser}"
+                                             update="userForm:userTable userForm:msgs"
+                                             resetValues="true"
+                                             oncomplete="PF('editUserDialog').hide()" />
+                            <p:commandButton value="Cancel" onclick="PF('editUserDialog').hide()" immediate="true" />
+                        </f:facet>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+
+
+        </ui:composition>
+
+    </body>
+</html>

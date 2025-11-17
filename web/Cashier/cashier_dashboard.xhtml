@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="./../template/layout.xhtml">
+
+        <!-- Sidebar Section -->
+        <ui:define name="sidebar">
+            <h:panelGrid columns="1">
+                <p:link outcome="fee_config" value="Fee Configuration" style="color:white;" />
+                <p:separator/>
+                <p:link outcome="assessment" value="Assessment" style="color:white;" />
+                <p:link outcome="enrollment_approval" value="Enrollment Approval" style="color:white;" />
+                <p:link outcome="payment_history" value="Payment History" style="color:white;" />
+                <p:link outcome="receipt_generator" value="Receipt Generator" style="color:white;" />
+            </h:panelGrid>
+        </ui:define>
+
+        <!-- Main Content Section -->
+        <ui:define name="content">
+            <h:form>
+                <p:panel header="Cashier Dashboard" styleClass="dashboard-panel">
+                    <div class="dashboard-grid">
+
+                        <p:panel styleClass="dashboard-tile" header="Assessment">
+                            <p:commandButton value="Go to Assessment" icon="pi pi-calculator"
+                                             action="/cashier/assessment.xhtml?faces-redirect=true"/>
+                        </p:panel>
+
+                        <p:panel styleClass="dashboard-tile" header="Enrollment Approval">
+                            <p:commandButton value="Approve Enrollments" icon="pi pi-check-circle"
+                                             action="/cashier/enrollment_approval.xhtml?faces-redirect=true"/>
+                        </p:panel>
+
+                        <p:panel styleClass="dashboard-tile" header="Fee Configuration">
+                            <p:commandButton value="Configure Fees" icon="pi pi-cog"
+                                             action="/cashier/fee_config.xhtml?faces-redirect=true"/>
+                        </p:panel>
+
+                        <p:panel styleClass="dashboard-tile" header="Payment History">
+                            <p:commandButton value="View History" icon="pi pi-history"
+                                             action="/cashier/payment_history.xhtml?faces-redirect=true"/>
+                        </p:panel>
+
+                        <p:panel styleClass="dashboard-tile" header="Receipt Generator">
+                            <p:commandButton value="Generate Receipt" icon="pi pi-print"
+                                             action="/cashier/receipt_generator.xhtml?faces-redirect=true"/>
+                        </p:panel>
+
+                    </div>
+                </p:panel>
+            </h:form>
+            <ui:include src="/includes/dpa-dialog.xhtml" />
+        </ui:define>
+
+    </ui:composition>
+</html>
+
+

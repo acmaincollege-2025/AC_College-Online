@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- File: /WebContent/admission/admission.xhtml -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Student Admission</title>
+        <style>
+            body { font-family: 'Segoe UI', sans-serif; background-color: #f8f8f8; margin: 0; }
+            .admission-form-container { max-width: 850px; margin: auto; padding: 2rem; background: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+            .header { background-color: #800000; color: white; padding: 1rem; text-align: center; font-size: 24px; border-top-left-radius: 10px; border-top-right-radius: 10px; }
+        </style>
+    </h:head>
+
+    <h:body style="margin:0; font-family:sans-serif;">
+        <h:form enctype="multipart/form-data">
+            <p:panel header="Student Admission Form" style="width: 80%; margin:auto; margin-top:30px; background-color:#fff3f3; border:1px solid #8b0000;">
+                <p:panelGrid columns="2" columnClasses="label,value" styleClass="ui-panelgrid-blank">
+                    <p:outputLabel value="Student No:" />
+                    <p:inputText value="#{admissionBean.student.studno}" required="true" />
+
+                    <p:outputLabel value="SR Code:" />
+                    <p:inputText value="#{admissionBean.student.srcode}" required="true" />
+
+                    <p:outputLabel value="Last Name:" />
+                    <p:inputText value="#{admissionBean.student.lastname}" />
+
+                    <p:outputLabel value="First Name:" />
+                    <p:inputText value="#{admissionBean.student.firstname}" />
+
+                    <p:outputLabel value="Middle Name:" />
+                    <p:inputText value="#{admissionBean.student.middlename}" />
+
+                    <p:outputLabel value="Gender:" />
+                    <p:selectOneMenu value="#{admissionBean.student.gender}">
+                        <f:selectItem itemLabel="Select" itemValue="" />
+                        <f:selectItem itemLabel="Male" itemValue="Male" />
+                        <f:selectItem itemLabel="Female" itemValue="Female" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Birthdate:" />
+                    <p:calendar value="#{admissionBean.student.dob}" pattern="yyyy-MM-dd" />
+
+                    <p:outputLabel value="Email:" />
+                    <p:inputText value="#{admissionBean.student.email}" />
+
+                    <p:outputLabel value="Contact No:" />
+                    <p:inputText value="#{admissionBean.student.contactno}" />
+
+                    <p:outputLabel value="Program ID:" />
+                    <p:inputText value="#{admissionBean.student.programId}" />
+
+                    <p:outputLabel value="Photo (path):" />
+                    <p:inputText value="#{admissionBean.student.photo}" />
+                </p:panelGrid>
+
+                <p:commandButton value="Save Student" action="#{admissionBean.saveStudent}" update=":form" style="background:#8b0000; color:white; margin-top:10px;" />
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>
+
+

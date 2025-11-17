@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../template/template.xhtml">
+
+            <ui:define name="nav">
+                <h:form>
+                    <p:menu>
+                        <p:menuitem action="enroll" value="Proceed to Ennrollment"/>
+                        <p:menuitem action="dashboard" value="Return to Dashboard"/>
+                        <p:menuitem action="login" value="Log Out"/>
+                    </p:menu>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form enctype="multipart/form-data">
+                    <p:panel header="Edit Personal Information">
+                        <h:panelGrid columns="2" cellpadding="5" styleClass="ui-fluid">
+
+                            <p:graphicImage value="#{'/resources/uploads/students/' += studentBean.student.photo}" width="120" height="120" rendered="#{not empty studentBean.student.photo}" />
+
+                            <p:outputLabel value="Last Name:" for="lastName" />
+                            <p:inputText id="lastName" value="#{studentBean.student.lastname}" required="true" />
+
+                            <p:outputLabel value="First Name:" for="firstName" />
+                            <p:inputText id="firstName" value="#{studentBean.student.first_ame}" required="true" />
+
+                            <p:outputLabel value="Middle Name:" for="middleName" />
+                            <p:inputText id="middleName" value="#{studentBean.student.middlename}" />
+
+                            <p:outputLabel value="Email:" for="email" />
+                            <p:inputText id="email" value="#{studentBean.student.email}" required="true" />
+
+                            <p:outputLabel value="Contact No:" for="contactNo" />
+                            <p:inputText id="contactNo" value="#{studentBean.student.contactNo}" />
+
+                            <p:outputLabel value="Address:" for="address" />
+                            <p:inputTextarea id="address" value="#{studentBean.student.address}" autoResize="false" rows="3"/>
+
+                            <p:outputLabel value="Photo Upload:" for="photoUpload" />
+                            <p:fileUpload id="photoUpload" mode="advanced" auto="true"
+                                          listener="#{studentBean.handleFileUpload}"
+                                          update=":form:msg" />
+                        </h:panelGrid>
+
+                        <p:commandButton value="Save Changes" action="#{studentBean.saveStudent}" icon="pi pi-save"
+                                         update="@form" styleClass="ui-button-success" style="margin-top:1rem" />
+                    </p:panel>
+                    <p:messages id="msg"  closable="true" />
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

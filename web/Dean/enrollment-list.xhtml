@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template/dean_layout.xhtml">
+
+            <ui:define name="sidebar">
+                <h:form>
+                    <h:panelGrid>
+                        <p:link outcome="dean" value="Return to Dashboard" style="color:white;"/>
+                        <p:link outcome="index" value="Log Out" style="color:white;"/>
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="enrollForm">
+
+                    <p:panel header="Enrollment List Generator" styleClass="maroon-header">
+                        <p:messages id="msgs" closable="true" showDetail="true" />
+
+                        <p:panelGrid columns="4" styleClass="p-grid p-fluid">
+                            <!-- program -->
+                            <p:outputLabel for="program" value="Program:" />
+                            <p:selectOneMenu id="program" value="#{enrollmentListBean.selectedProgram}" required="true">
+                                <f:selectItem itemLabel="Select Program" itemValue="" />
+                                <f:selectItems value="#{enrollmentListBean.programList}" var="p"
+                                               itemLabel="#{p.programName}" itemValue="#{p.programId}" />
+                            </p:selectOneMenu>
+
+                            <!-- year -->
+                            <p:outputLabel for="year" value="Year:" />
+                            <p:selectOneMenu id="year" value="#{enrollmentListBean.selectedYear}" required="true">
+                                <f:selectItem itemLabel="Select Year" itemValue="" />
+                                <f:selectItems value="#{enrollmentListBean.years}" />
+                            </p:selectOneMenu>
+
+                            <!-- semester -->
+                            <p:outputLabel for="semester" value="Semester:" />
+                            <p:selectOneMenu id="semester" value="#{enrollmentListBean.selectedSemester}" required="true">
+                                <f:selectItem itemLabel="Select Semester" itemValue="" />
+                                <f:selectItem itemLabel="1st" itemValue="1st" />
+                                <f:selectItem itemLabel="2nd" itemValue="2nd" />
+                                <f:selectItem itemLabel="Summer" itemValue="Summer" />
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+
+                        <p:commandButton value="Generate List"
+                                         icon="pi pi-search"
+                                         action="#{enrollmentListBean.loadEnrolledStudents}"
+                                         update="msgs studentTable"
+                                         styleClass="p-mt-3" />
+                    </p:panel>
+
+                    <p:spacer height="20" />
+
+                    <p:panel header="Enrollment List" styleClass="maroon-header">
+                        <ui:fragment rendered="#{not empty enrollmentListBean.studentList}">
+                            <p:dataTable id="studentTable"
+                                         value="#{enrollmentListBean.studentList}"
+                                         var="s"
+                                         paginator="true"
+                                         rows="10"
+                                         emptyMessage="No enrolled students found."
+                                         styleClass="p-datatable-striped">
+
+                                <p:column headerText="Student No">
+                                    <h:outputText value="#{s.studNo}" />
+                                </p:column>
+                                <p:column headerText="Name">
+                                    <h:outputText value="#{s.lastName}, #{s.firstName} #{s.middleName}" />
+                                </p:column>
+                                <p:column headerText="Program">
+                                    <h:outputText value="#{s.programName}" />
+                                </p:column>
+                                <p:column headerText="Year">
+                                    <h:outputText value="#{s.yearLevel}" />
+                                </p:column>
+                            </p:dataTable>
+
+                            <p:spacer height="10" />
+                            <p:commandButton value="Print"
+                                             icon="pi pi-print"
+                                             onclick="window.print();"
+                                             type="button"
+                                             styleClass="p-button-success" />
+                        </ui:fragment>
+
+                        <ui:fragment rendered="#{empty enrollmentListBean.studentList}">
+                            <h:outputText value="No records to display. Please filter first." style="color:gray;" />
+                        </ui:fragment>
+                    </p:panel>
+
+                </h:form>
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

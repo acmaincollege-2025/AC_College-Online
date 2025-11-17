@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template/template.xhtml">
+
+            <ui:define name="sidebar">
+                <h:form>
+                    <h:panelGrid>
+                        <p:link outcome="student-registration" value="Register Student" style="color:white;"/>
+                        <p:link outcome="dashboard" value="Return to Dashboard" style="color:white;"/>
+                        <p:link outcome="index" value="Log Out" style="color:white;"/>
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="admissionEnrollmentForm">
+                    <h:panelGroup rendered="#{not enrollmentPeriodBean.enrollmentOpen}">
+                        <h:outputText value="Enrollment is currently closed. Please check back later."
+                                      style="color:red; font-weight:bold;" />
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{enrollmentPeriodBean.enrollmentOpen}">
+                        <h:outputText value="Enrollment is currently open. You may now proceed to enroll."
+                                      style="color:green; font-weight:bold;" />
+                    </h:panelGroup>
+                    <p:growl id="growl" showDetail="true" life="5000" />
+
+                    <p:panel header="Registrar Enrollment Panel">
+                        <p:outputLabel for="searchType" value="Search by:" />
+                        <p:selectOneMenu id="searchType" value="#{enrollmentBean.searchType}">
+                            <f:selectItem itemLabel="Last Name" itemValue="lastname" />
+                            <f:selectItem itemLabel="Student No" itemValue="studno" />
+                        </p:selectOneMenu>
+
+                        <p:inputText id="searchInput" value="#{enrollmentBean.searchKeyword}" placeholder="Enter keyword">
+                            <p:ajax event="keyup" listener="#{enrollmentBean.searchStudents}" update="studentTable" />
+                        </p:inputText>
+
+                        <p:dataTable id="studentTable" value="#{enrollmentBean.filteredStudents}" var="s"
+                                     rowKey="#{s.studno}" selectionMode="single"
+                                     selection="#{enrollmentBean.selectedStudent}">
+                            <p:ajax event="rowSelect"
+                                    listener="#{enrollmentBean.onStudentSelect}"
+                                    update="@form" />
+                            <p:column headerText="Student No">
+                                <h:outputText value="#{s.studno}" />
+                            </p:column>
+                            <p:column headerText="Name">
+                                <h:outputText value="#{s.lastname}, #{s.firstname}" />
+                            </p:column>
+                        </p:dataTable>
+
+                        <!-- Always render this panel, but conditionally show content -->
+                        <p:panel id="enrollPanel" header="Enrollment Form">
+                            <h:panelGrid columns="2" cellpadding="5" rendered="#{not empty enrollmentBean.selectedStudent}">
+                                <p:outputLabel value="Academic Year:" />
+                                <p:inputText value="#{enrollmentBean.enrollment.academic_year}" placeholder="e.g. 2024-2025" />
+
+                                <p:outputLabel value="Semester:" />
+                                <p:selectOneMenu value="#{enrollmentBean.enrollment.semester}">
+                                    <f:selectItem itemLabel="1st" itemValue="1st" />
+                                    <f:selectItem itemLabel="2nd" itemValue="2nd" />
+                                    <f:selectItem itemLabel="Summer" itemValue="Summer" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+
+                            <p:commandButton value="Enroll"
+                                             action="#{enrollmentBean.enrollStudentFromAdmin}"
+                                             update="@form growl"
+                                             styleClass="ui-button-success"
+                                             rendered="#{not empty enrollmentBean.selectedStudent}" />
+                            <p:commandButton value="View Confirmation"
+                                             action="#{enrollmentBean.viewConfirmation(enroll)}"
+                                             icon="pi pi-eye"
+                                             ajax="false"/>
+
+                        </p:panel>
+                    </p:panel>
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <body>
+        <ui:composition template="./../template/layout.xhtml">
+            <ui:define name="sidebar">
+                <h:form>
+                    <p:link outcome="index" value="Log Out" style="color:white;"/>
+                </h:form>
+            </ui:define>
+            <ui:define name="content">
+                <h:form>
+                    <!-- Only visible if the user is Admin -->
+                    <h:panelGroup rendered="#{userSessionBean.admin}">
+                        <p:panel header="Audit Logs" styleClass="ui-panel-shadow">
+
+                            <p:dataTable value="#{auditLogBean.logs}" var="log"
+                                         paginator="true" rows="10"
+                                         id="logTable" widgetVar="logTable">
+
+                                <p:column headerText="Timestamp">
+                                    <h:outputText value="#{log.timestamp}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Username">
+                                    <h:outputText value="#{log.username}" />
+                                </p:column>
+
+                                <p:column headerText="Action">
+                                    <h:outputText value="#{log.action}" />
+                                </p:column>
+
+                                <p:column headerText="Details">
+                                    <h:outputText value="#{log.description}" />
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </p:panel>
+                    </h:panelGroup>
+
+                    <!-- Warning message for non-admin users -->
+                    <h:panelGroup rendered="#{not userSessionBean.admin}">
+                        <p:panel style="border:1px solid #FFA726; background-color: #FFF3E0; padding: 10px;">
+                            <h:outputText value="⚠ Access Denied: Only Admin users can view this page."
+                                          style="color:#EF6C00; font-weight: bold;" />
+                        </p:panel>
+                    </h:panelGroup>
+                </h:form>
+
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
+

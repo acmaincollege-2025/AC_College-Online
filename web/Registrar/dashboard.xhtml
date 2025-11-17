@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<head>
+    <title>Dashboard</title>
+    
+</head>
+<body>
+
+<ui:composition template="./../template/layout.xhtml">
+
+    <ui:define name="sidebar">
+        <h:form>
+            
+            <p:outputLabel value="Student Management" style="color:white;" />
+            <p:separator/>
+            <h:panelGrid>
+                <p:link outcome="student" value="Student Admission" style="color:white;" />
+                <p:link outcome="enrollment" value="Student Enrollment" style="color:white;" />
+                <p:link outcome="student-list" value="Student List" style="color:white;" />
+                <p:link outcome="student-progress" value="View Student Curricullum" style="color:white;" />
+            </h:panelGrid>
+
+            <p:separator/>
+            <p:outputLabel value="Course and Programs" style="color:white;" />
+            <p:separator/>
+            <h:panelGrid>
+                <p:link outcome="course" value="Course Management" style="color:white;" />
+                <p:link outcome="courseList" value="View Course List" style="color:white;" />
+                <p:link outcome="programs" value="Program Management" style="color:white;" />
+            </h:panelGrid>
+            <p:separator/>
+            
+        </h:form>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="main-content">
+            <h:form id="statsForm">
+                <!-- Filter Panel -->
+                <p:panel header="Enrollment Statistics Filter" styleClass="maroon-header">
+                    <p:messages id="msgs" showDetail="true" closable="true" />
+
+                    <p:panelGrid columns="4" styleClass="p-grid p-fluid">
+                        <p:outputLabel for="year" value="Year:" />
+                        <p:selectOneMenu id="year" value="#{dashboardBean.selectedYear}" required="true">
+                            <f:selectItem itemLabel="Select Year" itemValue="" />
+                            <f:selectItems value="#{dashboardBean.years}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="semester" value="Semester:" />
+                        <p:selectOneMenu id="semester" value="#{dashboardBean.selectedSemester}" required="true">
+                            <f:selectItem itemLabel="Select Semester" itemValue="" />
+                            <f:selectItem itemLabel="1st" itemValue="1st" />
+                            <f:selectItem itemLabel="2nd" itemValue="2nd" />
+                            <f:selectItem itemLabel="Summer" itemValue="Summer" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="program" value="Program:" />
+                        <p:selectOneMenu id="program" value="#{dashboardBean.selectedProgramId}" required="true">
+                            <f:selectItem itemLabel="Select Program" itemValue="" />
+                            <f:selectItems value="#{dashboardBean.programList}" var="p"
+                                           itemLabel="#{p.program_name}" itemValue="#{p.program_code}" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+
+                    <p:commandButton value="View Statistics"
+                                     icon="pi pi-search"
+                                     action="#{dashboardBean.filterStats}"
+                                     update="@form chartPanel resultPanel msgs"
+                                     styleClass="p-mt-3" />
+                </p:panel>
+
+                <p:spacer height="20" />
+
+                <!-- Chart Panel -->
+                <p:panel id="chartPanel" header="Enrollment Summary Chart" styleClass="maroon-header">
+                    <ui:fragment rendered="#{not empty dashboardBean.enrollmentStats}">
+                        <p:barChart model="#{dashboardBean.enrollmentChart}" style="height:400px;" />
+                    </ui:fragment>
+                    <ui:fragment rendered="#{empty dashboardBean.enrollmentStats}">
+                        <h:outputText value="No statistics found for the selected filters." style="color:gray;" />
+                    </ui:fragment>
+                </p:panel>
+
+                <p:spacer height="20" />
+
+                <!-- Data Table Panel -->
+                <p:panel id="resultPanel" header="Enrollment Results Table" styleClass="maroon-header">
+                    <ui:fragment rendered="#{not empty dashboardBean.enrollmentStats}">
+                        <p:dataTable value="#{dashboardBean.enrollmentStats}" var="e" paginator="true" rows="10"
+                                     emptyMessage="No enrollment records found."
+                                     rowKey="#{e.courseTitle}" styleClass="p-datatable-striped">
+
+                            <p:column headerText="Course Code">
+                                <h:outputText value="#{e.courseTitle}" />
+                            </p:column>
+                            <p:column headerText="Course Title">
+                                <h:outputText value="#{e.courseTitle}" />
+                            </p:column>
+                            <p:column headerText="Enrolled Count">
+                                <h:outputText value="#{e.enrolledCount}" />
+                            </p:column>
+                        </p:dataTable>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{empty dashboardBean.enrollmentStats}">
+                        <h:outputText value="No enrollment records found for the selected filters." style="color:gray;" />
+                    </ui:fragment>
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>
+
+</body>
+</html>

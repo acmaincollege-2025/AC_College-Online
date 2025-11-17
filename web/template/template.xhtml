@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>College Enrollment System</title>
+        <style>
+            body {
+                margin: 0;
+                font-family: 'Segoe UI', sans-serif;
+                background-color: #f4f6f9;
+            }
+
+            .layout-wrapper {
+                display: grid;
+                grid-template-areas: 
+                    "header header"
+                    "sidebar content"
+                    "footer footer";
+                grid-template-columns: 240px 1fr;
+                grid-template-rows: 60px auto 50px;
+                height: 100vh;
+            }
+
+            .header {
+                grid-area: header;
+                background-color: #3f51b5;
+                color: white;
+                padding: 15px 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            }
+
+            .header h2 {
+                margin: 0;
+                font-size: 1.5rem;
+            }
+
+            .sidebar {
+                grid-area: sidebar;
+                background-color: #2c387e;
+                color: white;
+                padding: 10px;
+                overflow-y: auto;
+                border-right: 1px solid #1a237e;
+            }
+
+            .sidebar .ui-menu {
+                border: none;
+                background: transparent;
+            }
+
+            .sidebar .ui-menu .ui-menuitem-link {
+                color: #fff;
+                padding: 10px 15px;
+                display: block;
+                border-radius: 5px;
+            }
+
+            .sidebar .ui-menu .ui-menuitem-link:hover {
+                background-color: #00bcd4;
+                color: #000;
+            }
+
+            .content {
+                grid-area: content;
+                padding: 25px;
+                background-color: #fff;
+                overflow-y: auto;
+                border-left: 1px solid #ccc;
+            }
+
+            .footer {
+                grid-area: footer;
+                background-color: #3f51b5;
+                color: white;
+                text-align: center;
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            @media (max-width: 768px) {
+                .layout-wrapper {
+                    grid-template-areas: 
+                        "header"
+                        "content"
+                        "footer";
+                    grid-template-columns: 1fr;
+                    grid-template-rows: 60px auto 50px;
+                }
+
+                .sidebar {
+                    display: none;
+                }
+            }
+        </style>
+
+    </h:head>
+
+    <h:body>
+        <div class="layout-wrapper">
+
+            <!-- HEADER -->
+            <div class="header">
+                <div>
+                    <h:outputText value="College Enrollment System" style="font-size: 1.4rem; font-weight: bold;" />
+                </div>
+                <div>
+                    <h:form>
+                        <h:panelGroup rendered="#{loginBean.loggedIn}">
+                            <h:outputText value="Welcome, #{loginBean.fullname}" style="margin-right: 15px;" />
+                            <p:commandButton value="Logout" action="#{loginBean.logout}" icon="pi pi-sign-out"
+                                             styleClass="ui-button-danger" />
+                        </h:panelGroup>
+                    </h:form>
+                </div>
+            </div>
+
+            <!-- SIDEBAR -->
+            <div class="sidebar">
+
+                <ui:insert name="sidebar" />
+            </div>
+
+            <!-- MAIN CONTENT -->
+            <div class="content">
+                <ui:insert name="content" />
+            </div>
+
+            <!-- FOOTER -->
+            <div class="footer">
+                &copy; 2025 College Enrollment System | All Rights Reserved
+            </div>
+        </div>
+    </h:body>
+</html>

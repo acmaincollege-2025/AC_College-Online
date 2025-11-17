@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Student Portal</title>
+        <h:outputStylesheet name="styles.css" />
+    </h:head>
+
+    <h:body styleClass="layout-wrapper student-theme">
+        <!-- 🔥 Include Global DPA Notice Popup -->
+        <ui:include src="/includes/dpa-dialog.xhtml" />
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>🎓 Student</h2>
+            </div>
+            <p:link outcome="dashboard" value="🏠 Dashboard" style="color:white;" />
+            <p:link outcome="my-courses" value="📚 My Courses" style="color:white;" />
+            <p:link outcome="grades" value="📄 Grades" style="color:white;" />
+            <p:link outcome="profile" value="👤 Profile" style="color:white;" />
+
+            <ui:insert name="sidebar" />
+
+            <div class="sidebar-footer">
+                <h:form>
+                    <p:menuButton value="#{loginBean.user.fullname}" icon="pi pi-user" styleClass="profile-menu">
+                        <p:menuitem value="Update Profile" icon="pi pi-cog" onclick="PF('accountSettingsWidget').show();" />
+                        <p:menuitem value="Logout" icon="pi pi-sign-out" action="#{loginBean.logout}" />
+                    </p:menuButton>
+                </h:form>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="topbar">
+                <span>Welcome, #{loginBean.user.fullname}</span>
+                <h:outputText value="#{loginBean.user.role}" />
+            </div>
+
+            <div class="page-content">
+                <ui:insert name="content" />
+            </div>
+
+            <div class="footer">
+                <p>&copy; 2025 Student Portal | College Enrollment System</p>
+            </div>
+        </div>
+
+        <ui:include src="/components/account-settings-dialog.xhtml" />
+
+    </h:body>
+</html>

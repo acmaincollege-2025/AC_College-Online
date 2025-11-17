@@ -1,0 +1,25 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 18, 2025, 4:40:18 PM
+    Author     : hrkas
+*/
+
+.maroon-panel {
+    background-color: #f8f3f0; /* light maroon background */
+    border: 2px solid #800000; /* maroon border */
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.maroon-panel .ui-panel-titlebar {
+    background-color: #800000; /* deep maroon header */
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 16px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}

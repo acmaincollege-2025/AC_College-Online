@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="/template/layout.xhtml">
+
+            <ui:define name="content">
+                <h:form id="studentEnrollForm">
+                    <h:panelGroup rendered="#{not enrollmentPeriodBean.enrollmentOpen}">
+                        <h:outputText value="Enrollment is currently closed. Please check back later."
+                                      style="color:red; font-weight:bold;" />
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{enrollmentPeriodBean.enrollmentOpen}">
+                        <h:outputText value="Enrollment is currently open. You may now proceed to enroll."
+                                      <p:messages id="messages" showDetail="true"  />
+
+                            <h:panelGrid columns="2" cellpadding="5" styleClass="ui-fluid">
+
+                                style="color:green; font-weight:bold;" />
+                                </h:panelGroup>
+                                <p:panel header="Online Enrollment Portal" style="margin-bottom:20px">
+                                    <p:outputLabel value="Academic Year:" for="acadYear" />
+                                    <p:inputText id="acadYear" value="#{studentPortalBean.enrollment.academic_year}" placeholder="e.g. 2024-2025" required="true" />
+
+                                    <p:outputLabel value="Semester:" for="sem" />
+                                    <p:selectOneMenu id="sem" value="#{studentPortalBean.enrollment.semester}" required="true">
+                                        <f:selectItem itemLabel="Select" itemValue="" />
+                                        <f:selectItem itemLabel="1st" itemValue="1st" />
+                                        <f:selectItem itemLabel="2nd" itemValue="2nd" />
+                                        <f:selectItem itemLabel="Summer" itemValue="Summer" />
+                                    </p:selectOneMenu>
+
+                            </h:panelGrid>
+
+                            <p:spacer height="10" />
+
+                            <p:commandButton value="Submit Enrollment Request" action="#{studentPortalBean.submitEnrollment}" icon="pi pi-send"
+                                             update="studentEnrollForm" styleClass="ui-button-success" disabled="#{not enrollmentPeriodBean.openEnrollment()}"/>
+                            </p:panel>
+
+                            <p:panel header="Enrollment History">
+                                <p:dataTable value="#{studentPortalBean.myEnrollments}" var="e" paginator="true" rows="10"
+                                             emptyMessage="No enrollment records found.">
+
+                                    <p:column headerText="Academic Year">
+                                        <h:outputText value="#{e.academic_year}" />
+                                    </p:column>
+
+                                    <p:column headerText="Semester">
+                                        <h:outputText value="#{e.semester}" />
+                                    </p:column>
+
+                                    <p:column headerText="Status">
+                                        <h:outputText value="#{e.status}" />
+                                    </p:column>
+
+                                    <p:column headerText="Action">
+                                        <h:outputText value="Awaiting Approval" rendered="#{e.status eq 'Pending Approval'}" />
+                                        <h:outputLink value="/payment.xhtml" rendered="#{e.status eq 'Approved'}">
+                                            <p:button value="Proceed to Payment" />
+                                        </h:outputLink>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:panel>
+                            </h:form>
+
+                            </ui:define>
+
+
+                            </ui:composition>
+
+                            </body>
+                            </html>

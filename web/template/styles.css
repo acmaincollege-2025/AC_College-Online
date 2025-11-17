@@ -1,0 +1,101 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jul 30, 2025, 8:44:27 PM
+    Author     : hrkas
+*/
+
+/* styles.css - Centralized layout styling for all roles */
+
+/* Reset and Base Styles */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f6f9;
+}
+
+.layout-wrapper {
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "sidebar content"
+        "footer footer";
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: 60px auto 50px;
+    height: 100vh;
+}
+
+.header {
+    grid-area: header;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar {
+    grid-area: sidebar;
+    color: white;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.content {
+    grid-area: content;
+    padding: 25px;
+    background-color: #fff;
+    overflow-y: auto;
+    border-left: 1px solid #ccc;
+}
+
+.footer {
+    grid-area: footer;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 0.9rem;
+}
+
+.nav-menu .ui-menuitem-link {
+    color: #fff;
+    padding: 10px 15px;
+    display: block;
+    border-radius: 5px;
+}
+
+.nav-menu .ui-menuitem-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+/* Themes by Role */
+
+/* Dean - Blue */
+.dean-header { background-color: #3f51b5; }
+.dean-sidebar { background-color: #2c387e; }
+.dean-footer { background-color: #3f51b5; }
+
+/* Student - Green/Teal */
+.student-header { background-color: #00796b; }
+.student-sidebar { background-color: #004d40; }
+.student-footer { background-color: #00796b; }
+
+/* Cashier - Orange */
+.cashier-header { background-color: #ef6c00; }
+.cashier-sidebar { background-color: #e65100; }
+.cashier-footer { background-color: #ef6c00; }
+
+/* Admission - Maroon */
+.admission-header { background-color: #800000; }
+admission-sidebar { background-color: #5a0000; }
+.admission-footer { background-color: #800000; }
+
+/* Shared Utility Classes */
+.text-white { color: #fff; }
+.text-center { text-align: center; }
+.align-right { margin-left: auto; }

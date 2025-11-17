@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>Payment Acknowledgment Receipt</title>
+        <style>
+            .receipt-container {
+                width: 600px;
+                margin: auto;
+                border: 1px solid #aaa;
+                padding: 20px;
+                font-family: Arial, sans-serif;
+                background: #fdfdfd;
+            }
+            .header {
+                text-align: center;
+                font-weight: bold;
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+            .receipt-details {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .receipt-details td {
+                padding: 8px;
+            }
+            .footer {
+                text-align: center;
+                margin-top: 30px;
+                font-size: 12px;
+                color: #777;
+            }
+            .print-button {
+                margin-top: 20px;
+                text-align: center;
+            }
+            @media print {
+                .print-button {
+                    display: none;
+                }
+            }
+        </style>
+    </head>
+    <body>
+
+        <ui:composition template="./student-template.xhtml">
+
+            <ui:define name="content">
+                <h:panelGroup rendered="#{not empty paymentBean.receiptData}">
+                    <div class="receipt-container">
+                        <div class="header">Acknowledgment Receipt</div>
+
+                        <table class="receipt-details">
+                            <tr>
+                                <td><p:outputLabel value="Student No: " /></td>
+                                <td><h:outputText value="#{paymentBean.receiptData.studentNo}"/></td>
+                            </tr>
+                            <tr>
+                                <td><p:outputLabel value="Student Name: " /></td>
+                                <td><h:outputText value="#{paymentBean.receiptData.studentName}" /></td>
+                            </tr>
+                            <tr>
+                                <td><p:outputLabel value="Program: " /></td>
+                                <td><h:outputText value="#{paymentBean.receiptData.programName}" /></td>
+                            </tr>
+                            <tr>
+                                <td><p:outputLabel value="Enrollment ID: " /></td>
+                                <td><h:outputText value="#{paymentBean.receiptData.enrollmentId}"/> </td>
+                            </tr>
+                            <tr>
+                                <td><p:outputLabel value="Payment Mode: " /></td>
+                                <td><h:outputText value="#{paymentBean.receiptData.paymentMode}"/> </td>
+                            </tr>
+                            <tr>
+                                <td><p:outputLabel value="Payment Type: " /></td>
+                                <td><h:outputText value="#{paymentBean.receiptData.paymentType}"/></td>
+                            </tr>
+                            <tr>
+                                <td><p:outputLabel value="Reference Number: " /></td>
+                                <td><h:outputText value="#{paymentBean.receiptData.paymentReferenceNumber}"/></td>
+                            </tr>
+                            <tr>
+                                <td><p:outputLabel value="Amount Paid: " /></td>
+                                <td><h:outputText value="₱ #{paymentBean.receiptData.amountPaid}"/></td>
+                            </tr>
+                            <tr>
+                                <td><p:outputLabel value="Payment Date: " /></td>
+                                <td><h:outputText value="#{paymentBean.receiptData.paymentDate}">
+                                        <f:convertDateTime pattern="MMMM dd, yyyy hh:mm a" />
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="print-button">
+                            <h:commandButton value="Print Receipt" onclick="window.print(); return false;" />
+                        </div>
+
+                        <div class="footer">
+                            This is a system-generated receipt. Please keep it for your records.
+                        </div>
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{empty paymentBean.receiptData}">
+                    <h:outputText value="No receipt data found. Please go back and make a payment." />
+                </h:panelGroup>
+            </ui:define>
+
+            <ui:define name="footer">
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

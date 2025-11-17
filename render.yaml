@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: enrollment-system
+    env: docker
+    branch: main
+    dockerfilePath: Dockerfile
+    plan: starter
+    envVars:
+      - key: DB_HOST
+      - key: DB_PORT
+      - key: DB_NAME
+      - key: DB_USER
+      - key: DB_PASS

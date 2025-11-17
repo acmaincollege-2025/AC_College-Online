@@ -1,0 +1,65 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 11, 2025, 3:18:51 PM
+    Author     : hrkas
+*/
+
+body.student-body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+}
+
+.layout-wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 220px;
+    background-color: #800000; /* Maroon */
+    color: white;
+    padding: 1rem;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    font-size: 1.4rem;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.main-content {
+    flex-grow: 1;
+    background-color: #fdf9f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.header-bar {
+    background-color: #a94442; /* Light Maroon */
+    color: white;
+    padding: 1rem;
+    text-align: right;
+    font-weight: bold;
+}
+
+.content-area {
+    padding: 2rem;
+    overflow-y: auto;
+}

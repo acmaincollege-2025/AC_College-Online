@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>System Admin Portal</title>
+        <h:outputStylesheet name="styles.css" library="css"/>
+    </h:head>
+
+    <h:body styleClass="layout-wrapper admin-theme">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <h:graphicImage library="logo" name="logo.png" style="height: 40px; margin-right: 10px;" alt="Logo" />
+                <h:outputText value="System Admin" styleClass="portal-title"/>
+            </header>
+
+            <nav class="nav-links">
+                <p:link outcome="admin-dashboard.xhtml" value="🏠 Dashboard" />
+                <p:link outcome="user-management.xhtml" value="👥 User Management" />
+                <p:link outcome="settings.xhtml" value="⚙️ System Settings" />
+                <p:link outcome="audit-log.xhtml" value="🔔 Audit Logs" />
+            </nav>
+
+            <footer class="sidebar-footer">
+                <div class="user-section">
+                    <p:commandLink value="#{loginBean.user.fullname}" styleClass="profile-link"
+                                   onclick="PF('accountSettingsWidget').show(); return false;" />
+                </div>
+            </footer>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <span>Welcome, #{loginBean.user.fullname}</span>
+                <h:form>
+                    <p:commandLink value="Logout" action="#{loginBean.logout}" styleClass="logout-link" />
+                </h:form>
+            </header>
+
+            <section class="page-content">
+                <ui:insert name="content" />
+            </section>
+
+            <footer class="footer">
+                <p>&copy; 2025 College Information System. All rights reserved.</p>
+            </footer>
+        </main>
+
+        <!-- Include the reusable dialog -->
+        <ui:include src="/shared/account-settings-dialog.xhtml" />
+    </h:body>
+</html>

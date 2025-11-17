@@ -1,0 +1,8 @@
+[project]
+name = "enrollment-system"
+
+[[service]]
+name = "web"
+type = "docker"
+build = { command = "ant war" }
+start = "catalina.sh run"

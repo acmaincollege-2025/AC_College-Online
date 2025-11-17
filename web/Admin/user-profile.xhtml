@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../template/template.xhtml">
+
+            <ui:define name="sidebar">
+                <h:link outcome="#{loginBean.dashboardOutcome}" value="Back to Dashboard" style="color: white; "/><br/>
+                <h:link outcome="index" value="Logout" style="color: white; "/>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form>
+                    <p:panel header="User Profile">
+
+                        <p:messages showDetail="true" />
+
+                        <p:fieldset legend="Update Profile">
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <h:outputLabel value="Username:" for="username" />
+                                <p:inputText id="username" value="#{userProfileBean.currentUser.username}" required="true" />
+
+                                <h:outputLabel value="First Name:" for="firstname" />
+                                <p:inputText id="firstname" value="#{userProfileBean.currentUser.firstname}" />
+
+                                <h:outputLabel value="Last Name:" for="lastname" />
+                                <p:inputText id="lastname" value="#{userProfileBean.currentUser.lastname}" />
+                            </h:panelGrid>
+
+                            <p:commandButton value="Update Info" action="#{userProfileBean.updateProfile}" update="@form" />
+                        </p:fieldset>
+
+                        <p:spacer height="20"/>
+
+                        <p:fieldset legend="Change Password">
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <h:outputLabel value="Current Password:" />
+                                <p:password value="#{userProfileBean.currentPassword}" feedback="false" />
+
+                                <h:outputLabel value="New Password:" />
+                                <p:password value="#{userProfileBean.newPassword}" feedback="false" />
+
+                                <h:outputLabel value="Confirm Password:" />
+                                <p:password value="#{userProfileBean.confirmPassword}" feedback="false" />
+                            </h:panelGrid>
+
+                            <p:commandButton value="Change Password" action="#{userProfileBean.changePassword}" update="@form" />
+                        </p:fieldset>
+                    </p:panel>
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

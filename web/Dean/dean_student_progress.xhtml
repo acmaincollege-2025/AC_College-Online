@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./../template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="progressForm">
+            <p:panel header="Student Progress Monitoring" styleClass="maroon-header">
+
+                <!-- Student Selection -->
+                <p:panelGrid columns="2" columnClasses="p-col-fixed p-col" styleClass="p-grid p-fluid">
+                    <p:outputLabel value="Select Student:" for="studentSelect" />
+                    <p:selectOneMenu id="studentSelect" value="#{deanStudentProgressBean.selectedStudent}" style="width:100%">
+                        <f:selectItem itemLabel="-- Select --" itemValue="#{null}" />
+                        <f:selectItems value="#{deanStudentProgressBean.students}" var="stud"
+                                       itemLabel="#{stud.lastname}, #{stud.firstname}" itemValue="#{stud}" />
+                        <p:ajax listener="#{deanStudentProgressBean.loadStudentProgress}" update="enrollmentTable gpaPanel" />
+                    </p:selectOneMenu>
+                </p:panelGrid>
+
+                <p:spacer height="10" />
+
+                <!-- Enrollment History -->
+                <p:panel id="enrollmentTable" header="Enrollment History" rendered="#{not empty deanStudentProgressBean.enrollmentHistory}">
+                    <p:dataTable value="#{deanStudentProgressBean.enrollmentHistory}" var="enroll" rowKey="#{enroll.enrollment_id}" selectionMode="single">
+                        <p:column headerText="Year">
+                            <h:outputText value="#{enroll.academic_year}" />
+                        </p:column>
+                        <p:column headerText="Semester">
+                            <h:outputText value="#{enroll.semester}" />
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{enroll.status}" />
+                        </p:column>
+                        <p:column headerText="Actions">
+                            <p:commandButton value="View Courses" icon="pi pi-eye"
+                                             actionListener="#{deanStudentProgressBean.loadEnrolledCourses(enroll.enrollment_id)}"
+                                             update="courseTable gpaPanel" />
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+
+                <p:spacer height="10" />
+
+                <!-- Enrolled Courses -->
+                <p:panel id="courseTable" header="Enrolled Courses with Grades" rendered="#{not empty deanStudentProgressBean.enrolledCourses}">
+                    <p:dataTable value="#{deanStudentProgressBean.enrolledCourses}" var="course">
+                        <p:column headerText="Course Code">
+                            <h:outputText value="#{course.course_code}" />
+                        </p:column>
+                        <p:column headerText="Course Title">
+                            <h:outputText value="#{course.course_description}" />
+                        </p:column>
+                        <p:column headerText="Units">
+                            <h:outputText value="#{course.units}" />
+                        </p:column>
+                        <p:column headerText="Grade">
+                            <h:outputText value="#{course.grade}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+
+                <!-- GPA Display -->
+                <p:panel id="gpaPanel" header="GPA Summary" rendered="#{not empty deanStudentProgressBean.enrolledCourses}">
+                    <h:outputText value="GPA: #{deanStudentProgressBean.computeGPA()}" style="font-weight:bold; font-size:16px;" />
+                </p:panel>
+
+                <p:spacer height="10" />
+
+                <!-- Export Button -->
+                <p:commandButton value="Download PDF Report" icon="pi pi-download"
+                                 action="#{deanStudentProgressBean.downloadPDF}" ajax="false" />
+
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

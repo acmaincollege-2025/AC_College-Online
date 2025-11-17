@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./template/template.xhtml">
+
+            <ui:define name="sidebar">
+                <h:form>
+                    <h:panelGrid>
+                        <p:link outcome="index" value="Home" style="color: white"/>
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="signupForm">
+                    <h2>Create Your Student Account</h2>
+
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel for="studentNo" value="Student Number:" />
+                        <p:inputText id="studentNo" value="#{studentSignUpBean.studentNo}" required="true" />
+
+                        <h:outputLabel for="password" value="Password:" />
+                        <p:password id="password" value="#{studentSignUpBean.password}" required="true" />
+
+                        <h:outputLabel for="confirmPassword" value="Confirm Password:" />
+                        <p:password id="confirmPassword" value="#{studentSignUpBean.confirmPassword}" required="true" />
+                    </h:panelGrid>
+
+                    <p:messages id="msgs" closable="true" />
+                    <p:commandButton value="Sign Up"
+                                     icon="pi pi-user-plus"
+                                     action="#{studentSignUpBean.register}"
+                                     update="signupForm" />
+                    
+                    <p:link outcome="index" value="Cancel"/>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

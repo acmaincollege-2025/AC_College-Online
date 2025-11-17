@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../template/template.xhtml">
+
+            <ui:define name="sidebar">
+
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="approvalForm">
+
+                    <h3>Pending Enrollment Payments</h3>
+
+                    <p:messages id="msgs" showDetail="true"  closable="true" />
+
+                    <p:dataTable value="#{cashierApprovalBean.pendingEnrollments}" var="e"
+                                 selection="#{cashierApprovalBean.selectedEnrollment}"
+                                 selectionMode="single" rowKey="#{e.enrollment_id}"
+                                 paginator="true" rows="10" >
+
+                        <p:column headerText="Student No">
+                            <h:outputText value="#{e.studno}" />
+                        </p:column>
+
+                        <p:column headerText="Name">
+                            <h:outputText value="#{e.studentName}" />
+                        </p:column>
+
+                        <p:column headerText="Program">
+                            <h:outputText value="#{e.programName}" />
+                        </p:column>
+
+                        <p:column headerText="Payment Status">
+                            <h:outputText value="#{e.status}" />
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:spacer height="20"/>
+
+                    <!-- Approve Online Payment Panel -->
+                    <p:panel header="Approve Online Payment" rendered="#{cashierApprovalBean.selectedEnrollment ne null}">
+                        <p:commandButton value="Approve Selected Online Payment"
+                                         action="#{cashierApprovalBean.approveOnlinePayment}"
+                                         update="@form"
+                                         icon="pi pi-check" styleClass="ui-button-success" />
+                    </p:panel>
+
+                    <p:spacer height="20"/>
+
+                    <!-- On-site Payment Panel -->
+                    <p:panel header="Record On-site Payment" rendered="#{cashierApprovalBean.selectedEnrollment ne null}">
+
+                        <p:panelGrid columns="2" styleClass="ui-fluid">
+
+                            <p:outputLabel for="amountPaid" value="Amount Paid:" />
+                            <p:inputText id="amountPaid" value="#{cashierApprovalBean.payment.amountPaid}" required="true" label="Amount Paid" />
+
+                            <p:outputLabel for="refNo" value="Reference No. (optional):" />
+                            <p:inputText id="refNo" value="#{cashierApprovalBean.payment.paymentReferenceNumber}" />
+
+                        </p:panelGrid>
+
+                        <p:commandButton value="Record On-site Payment"
+                                         action="#{cashierApprovalBean.processOnsitePayment}"
+                                         update="@form"
+                                         icon="pi pi-save" styleClass="ui-button-primary" />
+
+                    </p:panel>
+
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

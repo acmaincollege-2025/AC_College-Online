@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Registrar - Course Management</title>
+    </h:head>
+    <h:body>
+        <h:form id="courseForm">
+            <p:panel header="Course Management" styleClass="maroon-header">
+                <p:messages id="msgs" showDetail="true"  closable="true" />
+
+                <p:panelGrid columns="2" columnClasses="label,value" styleClass="p-grid p-fluid">
+                    <p:outputLabel for="course_code" value="Course Code:" />
+                    <p:inputText id="course_code" value="#{courseBean.course.courseCode}" required="true" />
+
+                    <p:outputLabel for="course_title" value="Course Title:" />
+                    <p:inputText id="course_title" value="#{courseBean.course.courseTitle}" required="true" />
+
+                    <p:outputLabel for="units" value="Units:" />
+                    <p:inputText id="units" value="#{courseBean.course.units}" required="true" />
+
+                    <p:outputLabel for="program" value="Program:" />
+                    <p:selectOneMenu id="program" value="#{courseBean.course.programId}" required="true">
+                        <f:selectItem itemLabel="Select Program" itemValue="" />
+                        <f:selectItems value="#{courseBean.programList}" var="prog" itemLabel="#{prog.programName}" itemValue="#{prog.programId}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="semester" value="Semester:" />
+                    <p:selectOneMenu id="semester" value="#{courseBean.course.semester}" required="true">
+                        <f:selectItem itemLabel="Select Semester" itemValue="" />
+                        <f:selectItem itemLabel="1st" itemValue="1st" />
+                        <f:selectItem itemLabel="2nd" itemValue="2nd" />
+                        <f:selectItem itemLabel="Summer" itemValue="Summer" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="yearLevel" value="Year Level:" />
+                    <p:inputText id="yearLevel" value="#{courseBean.course.yearLevel}" required="true" />
+                </p:panelGrid>
+
+                <p:separator />
+
+                <p:commandButton value="#{courseBean.editMode ? 'Update Course' : 'Add Course'}" action="#{courseBean.saveCourse}" update=":courseForm:courseTable :courseForm:msgs" icon="pi pi-save" />
+                <p:commandButton value="Reset" action="#{courseBean.resetForm}" update=":courseForm" icon="pi pi-refresh" styleClass="p-button-secondary" />
+            </p:panel>
+
+            <p:spacer height="20" />
+
+            <p:panel header="Course List" styleClass="maroon-header">
+                <p:dataTable id="courseTable" value="#{courseBean.courseList}" var="c"  paginator="true" rows="10">
+                    <p:column headerText="Code">
+                        <h:outputText value="#{c.courseCode}" />
+                    </p:column>
+                    <p:column headerText="Title">
+                        <h:outputText value="#{c.courseTitle}" />
+                    </p:column>
+                    <p:column headerText="Units">
+                        <h:outputText value="#{c.units}" />
+                    </p:column>
+                    <p:column headerText="Program">
+                        <h:outputText value="#{c.programName}" />
+                    </p:column>
+                    <p:column headerText="Semester">
+                        <h:outputText value="#{c.semester}" />
+                    </p:column>
+                    <p:column headerText="Year Level">
+                        <h:outputText value="#{c.yearLevel}" />
+                    </p:column>
+                    <p:column headerText="Actions">
+                        <p:commandButton icon="pi pi-pencil" action="#{courseBean.editCourse(c)}" update=":courseForm" styleClass="p-button-sm p-button-warning" />
+                        <p:commandButton icon="pi pi-trash" action="#{courseBean.deleteCourse(c.courseId)}" update=":courseForm:courseTable :courseForm:msgs" styleClass="p-button-sm p-button-danger" />
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+
+        </h:form>
+        
+        <h:form enctype="multipart/form-data">
+            <h:inputFile value="#{courseBean.file}" />
+            <h:commandButton value="Upload Excel" action="#{courseBean.uploadCourses}" />
+        </h:form>
+
+    </h:body>
+</html>
+

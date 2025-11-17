@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./student-template.xhtml">
+
+            <ui:define name="content">
+                <h:form id="assessmentForm">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel value="Student Name:" />
+                        <h:outputText value="#{assessmentBean.assessment.studentName}" />
+
+                        <h:outputLabel value="Program:" />
+                        <h:outputText value="#{assessmentBean.assessment.programName}" />
+
+                        <h:outputLabel value="Year Level:" />
+                        <h:outputText value="#{assessmentBean.assessment.yearLevel}" />
+
+                        <h:outputLabel value="Academic Year:" />
+                        <h:outputText value="#{assessmentBean.assessment.academicYear}" />
+
+                        <h:outputLabel value="Semester:" />
+                        <h:outputText value="#{assessmentBean.assessment.semester}" />
+                    </h:panelGrid>
+
+                    <br/>
+
+                    <h3>Enrolled Courses</h3>
+                    <p:dataTable value="#{assessmentBean.enrolledCourses}" var="c" style="width:100%">
+                        <p:column headerText="Code">
+                            <h:outputText value="#{c.courseCode}" />
+                        </p:column>
+                        <p:column headerText="Title">
+                            <h:outputText value="#{c.courseTitle}" />
+                        </p:column>
+                        <p:column headerText="Units">
+                            <h:outputText value="#{c.units}" />
+                        </p:column>
+                    </p:dataTable>
+
+                    <br/>
+
+                    <h3>Fees Summary</h3>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel value="Tuition (per unit):" />
+                        <h:outputText value="#{assessmentBean.assessment.unitFee}" />
+
+                        <h:outputLabel value="Total Units:" />
+                        <h:outputText value="#{assessmentBean.assessment.totalUnits}" />
+
+                        <h:outputLabel value="Tuition Total:" />
+                        <h:outputText value="#{assessmentBean.assessment.unitFee * assessmentBean.assessment.totalUnits}" />
+
+                        <h:outputLabel value="Basic Fees:" />
+                        <h:outputText value="#{assessmentBean.basicFeeTotal}" />
+
+                        <h:outputLabel value="Other Fees:" />
+                        <h:outputText value="#{assessmentBean.otherFeeTotal}" />
+
+                        <h:outputLabel value="Total Amount:" style="font-weight:bold" />
+                        <h:outputText value="#{assessmentBean.assessment.totalAmount}" style="font-weight:bold" />
+                    </h:panelGrid>
+
+                    <br/>
+
+                    <p:commandButton value="Print" type="button" onclick="window.print();" icon="pi pi-print" styleClass="p-button-secondary" />
+                    </h:panelGroup>
+
+                </h:form>
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
